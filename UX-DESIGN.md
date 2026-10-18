@@ -8,4 +8,4 @@ Replace the contents of this file with the completed assignments, as described i
 - [prototype instructions](instructions-0b-prototyping.md)
 
 ## App Map
-<img width="472" height="592" alt="image" src="https://github.com/user-attachments/assets/d71accd0-e0a5-442e-a3f7-e828550fc124" />
+<img width="944" height="1184" alt="image" src="https://github.com/user-attachments/assets/705a66fe-152f-4e84-91fd-27f9ca554652" />

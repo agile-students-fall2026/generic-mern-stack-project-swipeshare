@@ -6,3 +6,6 @@ Replace the contents of this file with the completed assignments, as described i
 
 - [app map & wireframe instructions](instructions-0a-app-map-wireframes.md).
 - [prototype instructions](instructions-0b-prototyping.md)
+
+## App Map
+<img width="472" height="592" alt="image" src="https://github.com/user-attachments/assets/d71accd0-e0a5-442e-a3f7-e828550fc124" />

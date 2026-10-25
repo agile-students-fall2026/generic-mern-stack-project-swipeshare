@@ -1,7 +1,8 @@
 {
   "scripts": {
     "dev": "concurrently \"npm --prefix front-end run dev\" \"npm --prefix back-end run dev\"",
-    "format": "prettier -w ."
+    "format": "prettier -w .",
+    "lint": "npm --prefix front-end run lint && npm --prefix back-end run lint"
   },
   "devDependencies": {
     "concurrently": "^9.0.0",

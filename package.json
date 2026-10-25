@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "concurrently \"npm --prefix front-end run dev\" \"npm --prefix back-end run dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

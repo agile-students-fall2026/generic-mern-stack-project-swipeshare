@@ -1,8 +1,10 @@
 {
   "scripts": {
-    "dev": "concurrently \"npm --prefix front-end run dev\" \"npm --prefix back-end run dev\""
+    "dev": "concurrently \"npm --prefix front-end run dev\" \"npm --prefix back-end run dev\"",
+    "format": "prettier -w ."
   },
   "devDependencies": {
-    "concurrently": "^9.0.0"
+    "concurrently": "^9.0.0",
+    "prettier": "3.9.10"
   }
 }

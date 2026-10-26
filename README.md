@@ -3,11 +3,11 @@
 ## Local Development
 
 ```bash
-cd front-end
+npm install
 ```
 
 ```bash
-npm install
+cd front-end && npm install
 ```
 
 ```bash
@@ -23,5 +23,5 @@ npm run lint
 To run formatter:
 
 ```bash
-npm run format
+cd "$(git rev-parse --show-toplevel)" && npm run format
 ```

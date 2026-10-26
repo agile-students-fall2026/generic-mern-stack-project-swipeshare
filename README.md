@@ -3,7 +3,7 @@
 ## Local Development
 
 ```bash
-cd frontend
+cd front-end
 ```
 
 ```bash

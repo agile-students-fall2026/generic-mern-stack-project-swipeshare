@@ -8,6 +8,7 @@ Replace the contents of this file with the completed assignments, as described i
 - [prototype instructions](instructions-0b-prototyping.md)
 
 ## Wireframe
+
 https://www.figma.com/design/RbnjNsG24SsouP9fG0YEEi/SwipeShare?node-id=0-1&t=EhtSRYF1WVgcjYj3-1
 
 ### Landing Page
@@ -43,4 +44,5 @@ https://www.figma.com/design/RbnjNsG24SsouP9fG0YEEi/SwipeShare?node-id=0-1&t=Eht
 ![Create a Listing](ux-design/prototype/Create%20a%20Listing.png)
 
 ## App Map
+
 <img width="944" height="1184" alt="image" src="https://github.com/user-attachments/assets/705a66fe-152f-4e84-91fd-27f9ca554652" />

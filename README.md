@@ -25,3 +25,7 @@ To run formatter:
 ```bash
 cd "$(git rev-parse --show-toplevel)" && npm run format
 ```
+
+## Mock Backend
+
+Add your route in `front-end/src/mocks/handlers.js`, then `fetch` from front end as usual.

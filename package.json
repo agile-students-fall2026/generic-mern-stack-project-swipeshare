@@ -2,10 +2,13 @@
   "scripts": {
     "dev": "concurrently \"npm --prefix front-end run dev\" \"npm --prefix back-end run dev\"",
     "format": "prettier -w .",
-    "lint": "npm --prefix front-end run lint && npm --prefix back-end run lint"
+    "lint": "npm --prefix front-end run lint && npm --prefix back-end run lint",
+    "docs": "scalar document serve docs/openapi.yaml -p 3333 --watch",
+    "docs:lint": "scalar document validate docs/openapi.yaml"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@scalar/cli": "^2.13.2",
     "concurrently": "^9.0.0",
     "prettier": "3.9.10"
   }

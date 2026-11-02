@@ -22,8 +22,8 @@ jobs:
         with:
           node-version: lts/*
           cache: npm
-          cache-dependency-path: package-lock.json
-      - run: npm ci
+          cache-dependency-path: package.json
+      - run: npm install
       - run: npm run format:check
 
   lint:
@@ -35,8 +35,8 @@ jobs:
         with:
           node-version: lts/*
           cache: npm
-          cache-dependency-path: front-end/package-lock.json
-      - run: npm ci --prefix front-end
+          cache-dependency-path: front-end/package.json
+      - run: npm install --prefix front-end
       - run: npm run lint
 
   docs:
@@ -48,6 +48,6 @@ jobs:
         with:
           node-version: lts/*
           cache: npm
-          cache-dependency-path: package-lock.json
-      - run: npm ci
+          cache-dependency-path: package.json
+      - run: npm install
       - run: npm run docs:lint

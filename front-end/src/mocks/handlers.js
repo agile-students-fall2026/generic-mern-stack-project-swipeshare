@@ -6,7 +6,7 @@ export const handlers = [
     return HttpResponse.json({
       status: "ok",
       environment: import.meta.env.MODE,
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     });
   }),
 ];

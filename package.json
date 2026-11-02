@@ -2,6 +2,7 @@
   "scripts": {
     "dev": "concurrently \"npm --prefix front-end run dev\" \"npm --prefix back-end run dev\"",
     "format": "prettier -w .",
+    "format:check": "prettier --check .",
     "lint": "npm --prefix front-end run lint && npm --prefix back-end run lint",
     "docs": "scalar document serve docs/openapi.yaml -p 3333 --watch",
     "docs:lint": "scalar document validate docs/openapi.yaml"

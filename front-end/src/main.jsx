@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import "./index.css";
 import App from "./App.jsx";
 import { AppLayout } from "./components/AppLayout";
+import { Header } from "./components/Header";
 
 async function enableMocking() {
   if (!import.meta.env.DEV || import.meta.env.VITE_DISABLE_MOCKS) {
@@ -25,7 +26,44 @@ enableMocking()
         <BrowserRouter>
           <Routes>
             <Route element={<AppLayout />}>
+              {/* Replace with your components */}
               <Route path="/" element={<App />} />
+              <Route
+                path="/how-it-works"
+                element={<Header title="How It Works" />}
+              />
+              <Route
+                path="/select-user-type"
+                element={<Header title="Select User Type" />}
+              />
+              <Route
+                path="/marketplace"
+                element={<Header title="Swipe Marketplace" />}
+              />
+              <Route
+                path="/listings/new"
+                element={<Header title="Sell a Swipe" />}
+              />
+              <Route
+                path="/listings/:id"
+                element={<Header title="Swipe Details" />}
+              />
+              <Route
+                path="/my-listings"
+                element={<Header title="My Listings" />}
+              />
+              <Route
+                path="/my-listings/:id"
+                element={<Header title="Listing Detail" />}
+              />
+              <Route
+                path="/purchases/:id"
+                element={<Header title="Confirmation" showBack={false} />}
+              />
+              <Route
+                path="/purchases/:id/rate"
+                element={<Header title="Rating" />}
+              />
             </Route>
           </Routes>
         </BrowserRouter>

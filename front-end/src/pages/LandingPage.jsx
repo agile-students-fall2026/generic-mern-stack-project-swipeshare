@@ -14,7 +14,9 @@ function LandingPage() {
     <main className="landing-page">
       <div className="landing-top">
         <h1 className="landing-title">SwipeShare</h1>
-        <p className="landing-tagline">Buy and sell meal swipes with other students.</p>
+        <p className="landing-tagline">
+          Buy and sell meal swipes with other students.
+        </p>
       </div>
 
       <div className="landing-buttons">

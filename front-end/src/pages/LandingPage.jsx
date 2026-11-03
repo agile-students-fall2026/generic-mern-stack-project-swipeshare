@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import googleLogo from "../assets/google-logo.svg";
 import "./LandingPage.css";
 
 function LandingPage() {
@@ -22,7 +23,7 @@ function LandingPage() {
           className="landing-button google-button"
           onClick={handleGoogleSignIn}
         >
-          <span className="google-letter">G</span>
+          <img className="google-logo" src={googleLogo} alt="" />
           Sign in with Google
         </button>
 

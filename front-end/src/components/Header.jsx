@@ -1,17 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { useGoBack } from "@/lib/navigations";
 import { ArrowLeft } from "lucide-react";
-import { useLocation, useNavigate } from "react-router";
 
 export const Header = ({ title, showBack = true }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const goBack = () => {
-    if (location.key === "default") {
-      navigate("/");
-    } else {
-      navigate(-1);
-    }
-  };
+  const goBack = useGoBack();
 
   return (
     <>

@@ -5,6 +5,7 @@ import "./App.css";
 import App from "./App.jsx";
 import { AppLayout } from "./components/AppLayout";
 import { Header } from "./components/Header";
+import NotFound from "./components/NotFound";
 
 async function enableMocking() {
   if (!import.meta.env.DEV || import.meta.env.VITE_DISABLE_MOCKS) {
@@ -64,6 +65,7 @@ enableMocking()
                 path="/purchases/:id/rate"
                 element={<Header title="Rating" />}
               />
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </BrowserRouter>

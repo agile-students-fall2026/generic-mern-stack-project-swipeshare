@@ -1,13 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 export const Header = ({ title }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const goBack = () => {
+    if (location.key === "default") {
+      navigate("/");
+    } else {
+      navigate(-1);
+    }
+  };
+
   return (
     <>
       <header className="sticky top-0 z-10 grid h-14 grid-cols-[2.5rem_1fr_2.5rem] items-center bg-background px-2">
-        <Button variant="ghost" size="icon-lg" onClick={() => navigate(-1)}>
+        <Button variant="ghost" size="icon-lg" onClick={goBack}>
           <ArrowLeft />
         </Button>
         <h1 className="text-center text-lg font-medium">{title}</h1>

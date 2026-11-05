@@ -6,15 +6,203 @@ paths:
   /api/health:
     get:
       summary: Health Check
+      operationId: getHealth
       responses:
         "200":
-          description: "OK"
+          description: OK
           content:
             application/json:
               schema:
-                type: object
-                required: [status, environment, timestamp]
-                properties:
-                  status: { type: string, enum: [ok] }
-                  environment: { type: string, example: development }
-                  timestamp: { type: string, format: date-time }
+                $ref: "#/components/schemas/Health"
+
+  /api/listings:
+    get:
+      summary: List marketplace listings
+      description: Returns active listings
+      operationId: getListings
+      parameters:
+        - name: fulfillment
+          in: query
+          required: false
+          description: Only return listings of this type. Default to return both.
+          schema:
+            $ref: "#/components/schemas/Fulfillment"
+        - name: diningHall
+          in: query
+          required: false
+          description: >
+            Only return in-person listings at this dining hall. Online pickup
+            listings are not filtered by it, since the buyer picks the pickup
+            location.
+          schema:
+            type: string
+            example: Downstein
+        - name: from
+          in: query
+          required: false
+          description: >
+            Only return listings available at or after this time.
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          required: false
+          description: >
+            Only return listings available at or before this time.
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Marketplace listings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Listing"
+        "400":
+          description: Invalid query parameter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Health:
+      type: object
+      required: [status, environment, timestamp]
+      properties:
+        status: { type: string, enum: [ok] }
+        environment: { type: string, example: development }
+        timestamp: { type: string, format: date-time }
+
+    UserSummary:
+      description: Public info about a user
+      type: object
+      required: [id, firstName, lastInitial, rating]
+      properties:
+        id:
+          type: string
+          example: <uuid>
+        firstName:
+          type: string
+          example: Jane
+        lastInitial:
+          type: string
+          minLength: 1
+          maxLength: 1
+          example: S
+        rating:
+          description: Average rating out of 10. `null` if the user has no ratings yet.
+          type: [number, "null"]
+          minimum: 0
+          maximum: 10
+          example: 9.8
+        avatarUrl:
+          type: string
+          format: uri
+          example: https://picsum.photos/200
+
+    Fulfillment:
+      type: string
+      enum: [in_person, online]
+
+    ListingStatus:
+      description: Listing status
+      type: string
+      enum: [active, sold, expired]
+
+    TimeWindow:
+      type: object
+      required: [start, end]
+      properties:
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+
+    ListingBase:
+      type: object
+      required: [id, fulfillment, seller, price, status, createdAt]
+      properties:
+        id:
+          type: string
+          example: <uuid>
+        fulfillment:
+          $ref: "#/components/schemas/Fulfillment"
+        seller:
+          $ref: "#/components/schemas/UserSummary"
+        price:
+          description: Price in cents
+          type: integer
+          minimum: 0
+          example: 850
+        status:
+          $ref: "#/components/schemas/ListingStatus"
+        createdAt:
+          type: string
+          format: date-time
+
+    InPersonListing:
+      description: Seller meets the buyer at the dining hall and swipes them in.
+      allOf:
+        - $ref: "#/components/schemas/ListingBase"
+        - type: object
+          required: [fulfillment, diningHall, availableAt]
+          properties:
+            fulfillment:
+              const: in_person
+            diningHall:
+              type: string
+              example: Downstein
+            availableAt:
+              description: When the seller will be at the dining hall to swipe the buyer in.
+              type: string
+              format: date-time
+
+    OnlineListing:
+      description: >
+        Seller places a Grubhub pickup order for the buyer. Grubhub only
+        supports ASAP orders, so a buyer can only purchase while one of the
+        seller's windows is active.
+      allOf:
+        - $ref: "#/components/schemas/ListingBase"
+        - type: object
+          required: [fulfillment, windows, quantity]
+          properties:
+            fulfillment:
+              const: online
+            windows:
+              description: Times when the seller can place orders.
+              type: array
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/TimeWindow"
+            quantity:
+              description: Swipes left for sale. Decremented on each purchase.
+              type: integer
+              minimum: 0
+              example: 5
+
+    Listing:
+      oneOf:
+        - $ref: "#/components/schemas/InPersonListing"
+        - $ref: "#/components/schemas/OnlineListing"
+      discriminator:
+        propertyName: fulfillment
+        mapping:
+          in_person: "#/components/schemas/InPersonListing"
+          online: "#/components/schemas/OnlineListing"
+
+    Error:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+          example: "Invalid `diningHall`: dining hall not found"

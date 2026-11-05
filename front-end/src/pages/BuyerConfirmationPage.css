@@ -1,0 +1,44 @@
+.confirmation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.confirmation-message {
+  font-size: 30px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.confirmation-icon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.confirmation-meetup-name {
+  font-size: 28px;
+  /* margin-bottom: 10px; */
+}
+
+.confirmation-meetup-location {
+  font-size: 50px;
+  line-height: 1.0;
+  margin-bottom: 6px;
+}
+
+.confirmation-meetup-time {
+  font-size: 20px;
+  /* margin-bottom: 20px; */
+}
+
+.confirmation-payment-methods {
+  font-size: 20px;
+  margin-top: 20px;
+  text-align: center;
+}

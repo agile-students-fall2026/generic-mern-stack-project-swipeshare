@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { displayPrice, fullNameInitial } from "@/lib/utils";
 import { Star } from "lucide-react";
 import { Link } from "react-router";
 
@@ -16,7 +17,7 @@ const MarketList = ({ listings }) => {
       <div className="flex flex-col gap-2">
         {listings?.map((listing) => {
           const seller = listing?.seller;
-          const price = (listing.price / 100).toFixed(2);
+          const price = displayPrice(listing.price);
           const fulfillment =
             listing.fulfillment === "in_person" ? "In Person" : "Online";
           const diningHalls =
@@ -39,9 +40,7 @@ const MarketList = ({ listings }) => {
                       width={30}
                       height={30}
                     />
-                    <h2>
-                      {seller.firstName} {seller.lastInitial}.
-                    </h2>
+                    <h2>{fullNameInitial(seller)}</h2>
                   </div>
                   <div className="flex flex-row gap-1 items-center text-sm">
                     <Star className="size-4 text-amber-500 fill-amber-400" />{" "}

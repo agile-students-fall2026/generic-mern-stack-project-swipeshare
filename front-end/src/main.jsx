@@ -7,6 +7,7 @@ import { AppLayout } from "./components/AppLayout";
 import { Header } from "./components/Header";
 import NotFound from "./components/NotFound";
 import HowItWorksPage from "./pages/HowItWorksPage.jsx";
+import MarketPlace from "./pages/marketplace/MarketPlace";
 import SelectUserType from "./pages/SelectUserType.jsx";
 
 async function enableMocking() {
@@ -33,10 +34,7 @@ enableMocking()
               <Route path="/" element={<App />} />
               <Route path="/how-it-works" element={<HowItWorksPage />} />
               <Route path="/select-user-type" element={<SelectUserType />} />
-              <Route
-                path="/marketplace"
-                element={<Header title="Swipe Marketplace" />}
-              />
+              <Route path="/marketplace" element={<MarketPlace />} />
               <Route
                 path="/listings/new"
                 element={<Header title="Sell a Swipe" />}

@@ -31,9 +31,9 @@ paths:
           in: query
           required: false
           description: >
-            Only return in-person listings at this dining hall. Online pickup
-            listings are not filtered by it, since the buyer picks the pickup
-            location.
+            Only return in-person listings whose `diningHalls` includes this
+            dining hall. Online listings are not filtered by it, since the
+            buyer picks the pickup location.
           schema:
             type: string
             example: Downstein
@@ -153,13 +153,20 @@ components:
       allOf:
         - $ref: "#/components/schemas/ListingBase"
         - type: object
-          required: [fulfillment, diningHall, availableAt]
+          required: [fulfillment, diningHalls, availableAt]
           properties:
             fulfillment:
               const: in_person
-            diningHall:
-              type: string
-              example: Downstein
+            diningHalls:
+              description: >
+                Dining halls the seller can meet at. The buyer picks one when
+                purchasing.
+              type: array
+              minItems: 1
+              uniqueItems: true
+              items:
+                type: string
+              example: [Downstein, Lipton]
             availableAt:
               description: When the seller will be at the dining hall to swipe the buyer in.
               type: string

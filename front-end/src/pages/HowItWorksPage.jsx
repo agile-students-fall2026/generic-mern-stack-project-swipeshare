@@ -1,6 +1,5 @@
-import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router";
 import faqImage from "../assets/faq-image.jpg";
+import { Header } from "../components/Header";
 import "./HowItWorksPage.css";
 
 const steps = [
@@ -34,42 +33,41 @@ const faqs = [
 
 function HowItWorksPage() {
   return (
-    <main className="how-page">
-      <Link to="/" className="how-back-button" aria-label="Back to home">
-        <ArrowLeft size={24} />
-      </Link>
+    <>
+      <Header title="How It Works" />
+      <main className="how-page">
+        <img
+          className="how-image"
+          src={faqImage}
+          alt="People sitting and standing around giant FAQ letters"
+        />
 
-      <img
-        className="how-image"
-        src={faqImage}
-        alt="People sitting and standing around giant FAQ letters"
-      />
+        <section className="how-section">
+          <h2 className="how-title">How SwipeShare works</h2>
+          <p className="how-intro">
+            SwipeShare connects students who have extra meal swipes with
+            students who need one.
+          </p>
 
-      <section className="how-section">
-        <h1 className="how-title">How SwipeShare works</h1>
-        <p className="how-intro">
-          SwipeShare connects students who have extra meal swipes with students
-          who need one.
-        </p>
+          <ol className="how-steps">
+            {steps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+        </section>
 
-        <ol className="how-steps">
-          {steps.map((step) => (
-            <li key={step}>{step}</li>
+        <section className="how-section">
+          <h2 className="how-subtitle">FAQ</h2>
+
+          {faqs.map((faq) => (
+            <details key={faq.question} className="faq-item">
+              <summary className="faq-question">{faq.question}</summary>
+              <p className="faq-answer">{faq.answer}</p>
+            </details>
           ))}
-        </ol>
-      </section>
-
-      <section className="how-section">
-        <h2 className="how-subtitle">FAQ</h2>
-
-        {faqs.map((faq) => (
-          <details key={faq.question} className="faq-item">
-            <summary className="faq-question">{faq.question}</summary>
-            <p className="faq-answer">{faq.answer}</p>
-          </details>
-        ))}
-      </section>
-    </main>
+        </section>
+      </main>
+    </>
   );
 }
 

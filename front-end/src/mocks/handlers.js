@@ -42,6 +42,18 @@ export const handlers = [
     return HttpResponse.json(result);
   }),
 
+  http.get("/api/listings/:id", async ({ params }) => {
+    await delay();
+    const listing = listingData.find((l) => l.id === params.id);
+    if (!listing) {
+      return HttpResponse.json(
+        { message: "Listing not found" },
+        { status: 404 },
+      );
+    }
+    return HttpResponse.json(listing);
+  }),
+
   http.get("/api/dining-halls", async () => {
     await delay();
     return HttpResponse.json(locations);

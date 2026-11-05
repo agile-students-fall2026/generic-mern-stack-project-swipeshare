@@ -69,6 +69,30 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /api/listings/{id}:
+    get:
+      summary: Get a listing
+      operationId: getListing
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Listing"
+        "404":
+          description: Listing not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /api/dining-halls:
     get:
       summary: List dining halls
@@ -125,6 +149,12 @@ components:
       type: string
       enum: [in_person, online]
 
+    PaymentMethod:
+      description: >
+        How the buyer pays the seller after getting the swipe.
+      type: string
+      enum: [venmo, zelle, paypal, cash, apple_cash]
+
     ListingStatus:
       description: Listing status
       type: string
@@ -143,7 +173,8 @@ components:
 
     ListingBase:
       type: object
-      required: [id, fulfillment, seller, price, status, createdAt]
+      required:
+        [id, fulfillment, seller, price, paymentMethods, status, createdAt]
       properties:
         id:
           type: string
@@ -157,6 +188,13 @@ components:
           type: integer
           minimum: 0
           example: 850
+        paymentMethods:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/PaymentMethod"
+          example: [venmo, zelle, cash]
         status:
           $ref: "#/components/schemas/ListingStatus"
         createdAt:
@@ -210,6 +248,12 @@ components:
               type: integer
               minimum: 0
               example: 5
+            paymentMethods:
+              description: Online payment methods only.
+              items:
+                not:
+                  const: cash
+              example: [venmo, zelle]
 
     Listing:
       oneOf:

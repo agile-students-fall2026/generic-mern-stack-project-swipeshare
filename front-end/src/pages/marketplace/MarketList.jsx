@@ -10,6 +10,7 @@ import {
 import { ClockIcon, Star } from "lucide-react";
 
 const MarketList = ({ listings }) => {
+  // TODO: delete this
   console.log(listings);
   return (
     <>

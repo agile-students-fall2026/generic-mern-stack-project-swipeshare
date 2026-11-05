@@ -1,0 +1,20 @@
+openapi: 3.1.0
+info:
+  title: SwipeShare API
+  version: 0.1.0
+paths:
+  /api/health:
+    get:
+      summary: Health Check
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, environment, timestamp]
+                properties:
+                  status: { type: string, enum: [ok] }
+                  environment: { type: string, example: development }
+                  timestamp: { type: string, format: date-time }

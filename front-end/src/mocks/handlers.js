@@ -35,7 +35,8 @@ export const handlers = [
     if (diningHall) {
       result = result.filter(
         (l) =>
-          l.fulfillment !== "in_person" || l.diningHalls.includes(diningHall),
+          l.fulfillment !== "in_person" ||
+          l.diningHalls.some((h) => h.name === diningHall),
       );
     }
 

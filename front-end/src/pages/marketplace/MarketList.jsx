@@ -21,7 +21,7 @@ const MarketList = ({ listings }) => {
             listing.fulfillment === "in_person" ? "In Person" : "Online";
           const diningHalls =
             listing.fulfillment === "in_person"
-              ? listing.diningHalls.join(", ")
+              ? listing.diningHalls.map((h) => h.name).join(", ")
               : "Any GrubHub on-campus dining";
 
           return (

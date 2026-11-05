@@ -1,5 +1,10 @@
+import { locations } from "../../../shared/locations";
+
 const minutesFromNow = (minutes) =>
   new Date(Date.now() + minutes * 60000).toISOString();
+
+const halls = (...names) =>
+  names.map((name) => locations.find((l) => l.name === name));
 
 export const listingData = [
   {
@@ -16,7 +21,7 @@ export const listingData = [
     paymentMethods: ["venmo", "zelle", "cash"],
     status: "active",
     createdAt: "2026-11-03T01:03:48.899Z",
-    diningHalls: ["Downstein"],
+    diningHalls: halls("Downstein"),
     availableAt: "2026-12-05T01:03:48.899Z",
   },
   {
@@ -33,7 +38,7 @@ export const listingData = [
     paymentMethods: ["venmo", "cash"],
     status: "active",
     createdAt: minutesFromNow(-90),
-    diningHalls: ["Lipton", "Downstein"],
+    diningHalls: halls("Lipton", "Downstein"),
     availableAt: minutesFromNow(25),
   },
   {
@@ -70,7 +75,7 @@ export const listingData = [
     paymentMethods: ["zelle", "paypal"],
     status: "active",
     createdAt: minutesFromNow(-15),
-    diningHalls: ["Palladium"],
+    diningHalls: halls("Palladium"),
     availableAt: minutesFromNow(70),
   },
   {
@@ -104,7 +109,7 @@ export const listingData = [
     paymentMethods: ["venmo", "zelle", "paypal", "cash", "apple_cash"],
     status: "active",
     createdAt: minutesFromNow(-45),
-    diningHalls: ["Third North", "Palladium", "Upstein"],
+    diningHalls: halls("Third North", "Palladium", "Upstein"),
     availableAt: minutesFromNow(120),
   },
 ];

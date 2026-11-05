@@ -31,9 +31,9 @@ paths:
           in: query
           required: false
           description: >
-            Only return in-person listings whose `diningHalls` includes this
-            dining hall. Online listings are not filtered by it, since the
-            buyer picks the pickup location.
+            Only return in-person listings whose `diningHalls` includes the
+            dining hall with this `name`. Online listings are not filtered by
+            it, since the buyer picks the pickup location.
           schema:
             type: string
             example: Downstein
@@ -218,8 +218,7 @@ components:
               minItems: 1
               uniqueItems: true
               items:
-                type: string
-              example: [Downstein, Lipton]
+                $ref: "#/components/schemas/DiningHall"
             availableAt:
               description: When the seller will be at the dining hall to swipe the buyer in.
               type: string

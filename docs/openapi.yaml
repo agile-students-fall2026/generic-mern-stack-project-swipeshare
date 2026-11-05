@@ -69,6 +69,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /api/dining-halls:
+    get:
+      summary: List dining halls
+      description: NYU dining locations, from Dine On Campus.
+      operationId: getDiningHalls
+      responses:
+        "200":
+          description: Dining halls
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DiningHall"
+
 components:
   schemas:
     Health:
@@ -205,6 +220,38 @@ components:
         mapping:
           in_person: "#/components/schemas/InPersonListing"
           online: "#/components/schemas/OnlineListing"
+
+    DiningHall:
+      type: object
+      required: [id, name, street, detail, city, zip, lat, lon, image]
+      properties:
+        id:
+          type: string
+          example: 5d2faa744198d4072d6457a8
+        name:
+          type: string
+          example: Downstein
+        street:
+          type: string
+          example: 5 University Pl
+        detail:
+          type: [string, "null"]
+          example: "Bldg #11"
+        city:
+          type: string
+          example: New York
+        zip:
+          type: string
+          example: "10003"
+        lat:
+          type: number
+          example: 40.7309551
+        lon:
+          type: number
+          example: -73.9946057
+        image:
+          type: string
+          format: uri
 
     Error:
       type: object

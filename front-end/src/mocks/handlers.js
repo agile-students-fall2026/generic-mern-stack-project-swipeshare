@@ -1,4 +1,5 @@
 import { delay, http, HttpResponse } from "msw";
+import { locations } from "../../../shared/locations";
 import { listingData } from "./data";
 
 export const handlers = [
@@ -14,5 +15,10 @@ export const handlers = [
   http.get("/api/listings", async () => {
     await delay();
     return HttpResponse.json(listingData);
+  }),
+
+  http.get("/api/dining-halls", async () => {
+    await delay();
+    return HttpResponse.json(locations);
   }),
 ];

@@ -1,20 +1,13 @@
-import { format, isToday, isTomorrow } from "date-fns";
+import { displayTime } from "@/lib/utils";
 import DiningHallFilter from "./DiningHallFilter";
 import TimeFilter from "./TimeFilter";
-
-const formatFilterTime = (iso) => {
-  const d = new Date(iso);
-  if (isToday(d)) return `Today, ${format(d, "h:mm a")}`;
-  if (isTomorrow(d)) return `Tmr, ${format(d, "h:mm a")}`;
-  return format(d, "MMM d, h:mm a");
-};
 
 const ListFilters = ({ filters, onFilter }) => {
   return (
     <div className="grid grid-cols-2 gap-2">
       <TimeFilter
         from={filters?.from}
-        time={filters?.from ? formatFilterTime(filters.from) : "ASAP"}
+        time={filters?.from ? displayTime(new Date(filters.from)) : "ASAP"}
         onChange={(iso) => onFilter("from", iso)}
       />
       <DiningHallFilter

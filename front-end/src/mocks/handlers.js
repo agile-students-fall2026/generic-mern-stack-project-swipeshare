@@ -25,9 +25,7 @@ export const handlers = [
       new Date(end) >= from && (!to || new Date(start) <= to);
 
     let result = listingData.filter((l) =>
-      l.fulfillment === "in_person"
-        ? overlaps(l.availableAt, l.availableAt)
-        : l.windows.some((w) => overlaps(w.start, w.end)),
+      l.windows.some((w) => overlaps(w.start, w.end)),
     );
     if (fulfillment) {
       result = result.filter((l) => l.fulfillment === fulfillment);

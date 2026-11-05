@@ -174,7 +174,16 @@ components:
     ListingBase:
       type: object
       required:
-        [id, fulfillment, seller, price, paymentMethods, status, createdAt]
+        [
+          id,
+          fulfillment,
+          seller,
+          price,
+          paymentMethods,
+          windows,
+          status,
+          createdAt,
+        ]
       properties:
         id:
           type: string
@@ -195,6 +204,12 @@ components:
           items:
             $ref: "#/components/schemas/PaymentMethod"
           example: [venmo, zelle, cash]
+        windows:
+          description: Times when the seller is available.
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/TimeWindow"
         status:
           $ref: "#/components/schemas/ListingStatus"
         createdAt:
@@ -206,7 +221,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/ListingBase"
         - type: object
-          required: [fulfillment, diningHalls, availableAt]
+          required: [fulfillment, diningHalls]
           properties:
             fulfillment:
               const: in_person
@@ -219,10 +234,8 @@ components:
               uniqueItems: true
               items:
                 $ref: "#/components/schemas/DiningHall"
-            availableAt:
-              description: When the seller will be at the dining hall to swipe the buyer in.
-              type: string
-              format: date-time
+            windows:
+              description: When the seller is at the dining hall to swipe the buyer in.
 
     OnlineListing:
       description: >
@@ -232,16 +245,12 @@ components:
       allOf:
         - $ref: "#/components/schemas/ListingBase"
         - type: object
-          required: [fulfillment, windows, quantity]
+          required: [fulfillment, quantity]
           properties:
             fulfillment:
               const: online
             windows:
-              description: Times when the seller can place orders.
-              type: array
-              minItems: 1
-              items:
-                $ref: "#/components/schemas/TimeWindow"
+              description: When the seller can place orders.
             quantity:
               description: Swipes left for sale. Decremented on each purchase.
               type: integer

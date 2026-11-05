@@ -5,6 +5,7 @@ import { displayPrice, fullNameInitial } from "@/lib/utils";
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import TimeSlots from "./TimeSlots";
 
 const SwipeDetail = () => {
   const { id } = useParams();
@@ -43,7 +44,7 @@ const SwipeDetail = () => {
       <main className="p-4">
         <div className="flex justify-center items-center flex-col gap-8">
           <img
-            className="w-full max-w-80 aspect-square object-cover rounded-full"
+            className="w-full max-w-64 aspect-square object-cover rounded-full"
             src={data?.seller.avatarUrl}
             referrerPolicy="no-referrer"
           />
@@ -56,6 +57,12 @@ const SwipeDetail = () => {
               {data.seller.rating ?? "No Rating"}
             </div>
           </div>
+          {data.fulfillment === "in_person" && (
+            <p className="text-2xl font-medium text-center">
+              {data.diningHalls.map((h) => h.name).join(", ")}
+            </p>
+          )}
+          <TimeSlots listing={data} />
           <h1 className="text-6xl font-medium">${displayPrice(data.price)}</h1>
           <Button size="lg">Purchase This Swipe</Button>
           <div className="flex flex-col gap-1 items-center justify-center">

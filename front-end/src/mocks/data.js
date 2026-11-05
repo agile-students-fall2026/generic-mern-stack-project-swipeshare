@@ -22,7 +22,9 @@ export const listingData = [
     status: "active",
     createdAt: "2026-11-03T01:03:48.899Z",
     diningHalls: halls("Downstein"),
-    availableAt: "2026-12-05T01:03:48.899Z",
+    windows: [
+      { start: "2026-12-05T01:03:48.899Z", end: "2026-12-05T03:03:48.899Z" },
+    ],
   },
   {
     id: "l2",
@@ -39,7 +41,7 @@ export const listingData = [
     status: "active",
     createdAt: minutesFromNow(-90),
     diningHalls: halls("Lipton", "Downstein"),
-    availableAt: minutesFromNow(25),
+    windows: [{ start: minutesFromNow(-20), end: minutesFromNow(40) }],
   },
   {
     id: "l3",
@@ -76,7 +78,7 @@ export const listingData = [
     status: "active",
     createdAt: minutesFromNow(-15),
     diningHalls: halls("Palladium"),
-    availableAt: minutesFromNow(70),
+    windows: [{ start: minutesFromNow(70), end: minutesFromNow(130) }],
   },
   {
     id: "l5",
@@ -110,6 +112,9 @@ export const listingData = [
     status: "active",
     createdAt: minutesFromNow(-45),
     diningHalls: halls("Third North", "Palladium", "Upstein"),
-    availableAt: minutesFromNow(120),
+    windows: [
+      { start: minutesFromNow(120), end: minutesFromNow(180) },
+      { start: minutesFromNow(1500), end: minutesFromNow(1620) },
+    ],
   },
 ];

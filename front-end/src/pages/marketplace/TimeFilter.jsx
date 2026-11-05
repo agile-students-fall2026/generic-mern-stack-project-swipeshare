@@ -15,7 +15,8 @@ const TimeFilter = ({ from, time = "ASAP", onChange }) => {
   return (
     <div className="relative">
       <Button className="w-full h-10 text-sm px-2">
-        <ClockIcon /> {time}
+        <ClockIcon />
+        <span className="min-w-0 truncate">{time}</span>
       </Button>
       <input
         type="datetime-local"

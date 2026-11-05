@@ -7,7 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ClockIcon, Star } from "lucide-react";
+import { Star } from "lucide-react";
+import { Link } from "react-router";
 
 const MarketList = ({ listings }) => {
   return (
@@ -24,7 +25,11 @@ const MarketList = ({ listings }) => {
               : "Any GrubHub on-campus dining";
 
           return (
-            <Card key={listing.id}>
+            <Card key={listing.id} className="relative">
+              <Link
+                to={`/listings/${listing.id}`}
+                className="absolute inset-0"
+              />
               <CardHeader>
                 <CardTitle className="flex flex-row gap-2 mb-2">
                   <div className="flex flex-row gap-2 items-center">

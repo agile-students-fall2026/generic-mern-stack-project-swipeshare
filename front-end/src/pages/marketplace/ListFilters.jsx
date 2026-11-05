@@ -11,7 +11,7 @@ const formatFilterTime = (iso) => {
 
 const ListFilters = ({ filters, onFilter }) => {
   return (
-    <div className="flex gap-2">
+    <div className="grid grid-cols-2 gap-2">
       <TimeFilter
         from={filters?.from}
         time={filters?.from ? formatFilterTime(filters.from) : "ASAP"}

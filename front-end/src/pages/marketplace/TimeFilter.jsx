@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 import { ClockIcon } from "lucide-react";
 
 const toInputValue = (iso) =>
@@ -13,7 +14,7 @@ const TimeFilter = ({ from, time = "ASAP", onChange }) => {
 
   return (
     <div className="relative">
-      <Button className="w-40 h-10 text-sm px-2">
+      <Button className="w-full h-10 text-sm px-2">
         <ClockIcon /> {time}
       </Button>
       <input

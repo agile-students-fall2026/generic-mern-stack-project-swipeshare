@@ -35,7 +35,9 @@ const DiningHallFilter = ({ value, onChange }) => {
 
   return (
     <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
-      <DrawerTrigger render={<Button className="w-40 h-10 text-sm px-2" />}>
+      <DrawerTrigger
+        render={<Button className="w-full min-w-0 h-10 text-sm px-2" />}
+      >
         <MapPinIcon />
         <span className="min-w-0 truncate">{value ?? "Any Dining Hall"}</span>
       </DrawerTrigger>

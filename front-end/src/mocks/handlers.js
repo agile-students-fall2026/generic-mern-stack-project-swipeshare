@@ -14,6 +14,11 @@ export const handlers = [
     });
   }),
 
+  http.post("/api/review", async () => {
+    await delay();
+    return HttpResponse.json({}, { status: 201 });
+  }),
+
   http.get("/api/listings", async ({ request }) => {
     await delay();
 

@@ -6,9 +6,9 @@ import App from "./App.jsx";
 import { AppLayout } from "./components/AppLayout";
 import { Header } from "./components/Header";
 import NotFound from "./components/NotFound";
-import RatingPage from "./pages/RatingPage";
 import BuyerConfirmationPage from "./pages/BuyerConfirmationPage";
 import HowItWorksPage from "./pages/HowItWorksPage.jsx";
+import RatingPage from "./pages/RatingPage";
 import SelectUserType from "./pages/SelectUserType.jsx";
 
 async function enableMocking() {
@@ -59,10 +59,7 @@ enableMocking()
                 path="/purchases/:id"
                 element={<BuyerConfirmationPage />}
               />
-              <Route
-                path="/purchases/:id/rate"
-                element={<RatingPage />}
-              />
+              <Route path="/purchases/:id/rate" element={<RatingPage />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

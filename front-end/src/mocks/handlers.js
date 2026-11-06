@@ -41,5 +41,5 @@ export const handlers = [
   http.post("/api/purchase/cancel", async () => {
     await delay();
     return HttpResponse.json({});
-  })
+  }),
 ];

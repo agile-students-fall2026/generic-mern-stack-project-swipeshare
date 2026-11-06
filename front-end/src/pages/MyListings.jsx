@@ -38,8 +38,8 @@ const MyListings = () => {
       <Header title="My Listings" />
       <main className="p-4 flex flex-col gap-8">
         <MarketList listings={data} basePath="/my-listings" showStatus />
-        <Button>
-          <Link to="/listings/new">Create Listing</Link>
+        <Button nativeButton={false} render={<Link to="/listings/new" />}>
+          Create Listing
         </Button>
       </main>
     </>

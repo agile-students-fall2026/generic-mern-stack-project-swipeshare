@@ -96,11 +96,11 @@ components:
           maxLength: 1
           example: S
         rating:
-          description: Average rating out of 10. `null` if the user has no ratings yet.
+          description: Average rating out of 5. `null` if the user has no ratings yet.
           type: [number, "null"]
           minimum: 0
-          maximum: 10
-          example: 9.8
+          maximum: 5
+          example: 4.9
         avatarUrl:
           type: string
           format: uri

@@ -84,6 +84,10 @@ function BuyerConfirmationPage() {
     window.location.href = `tel:${data.sellerPhone}`;
   }
 
+  function handleText() {
+    window.location.href = `sms:${data.sellerPhone}`;
+  }
+
   useEffect(() => {
     fetch(`/api/purchases/${id}`, {
       method: "GET",
@@ -136,7 +140,7 @@ function BuyerConfirmationPage() {
           meetupTimeString: purchaseDetails.meetAt
             ? stringifyDate(purchaseDetails.meetAt)
             : "",
-          sellerPhone: purchaseDetails.sellerPhone,
+          sellerPhone: purchaseDetails.seller.phone.replace("-", ""),
           paymentTypeString: paymentTypeString,
         });
       });
@@ -177,6 +181,9 @@ function BuyerConfirmationPage() {
         </button>
         <button className="submit-button" onClick={handleCall}>
           Call Seller
+        </button>
+        <button className="submit-button" onClick={handleText}>
+          Text Seller
         </button>
       </div>
     </div>

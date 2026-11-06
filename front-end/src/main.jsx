@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import { AppLayout } from "./components/AppLayout";
 import { Header } from "./components/Header";
 import NotFound from "./components/NotFound";
+import HowItWorksPage from "./pages/HowItWorksPage.jsx";
 
 async function enableMocking() {
   if (!import.meta.env.DEV || import.meta.env.VITE_DISABLE_MOCKS) {
@@ -29,10 +30,7 @@ enableMocking()
             <Route element={<AppLayout />}>
               {/* Replace with your components */}
               <Route path="/" element={<App />} />
-              <Route
-                path="/how-it-works"
-                element={<Header title="How It Works" />}
-              />
+              <Route path="/how-it-works" element={<HowItWorksPage />} />
               <Route
                 path="/select-user-type"
                 element={<Header title="Select User Type" />}

@@ -1,8 +1,14 @@
 import { delay, http, HttpResponse } from "msw";
 import { locations } from "../../../shared/locations";
-import { currentUser, listingData, paymentInfo, phones } from "./data";
+import {
+  currentUser,
+  listingData,
+  paymentInfo,
+  phones,
+  purchaseData,
+} from "./data";
 
-const purchases = [];
+const purchases = [...purchaseData];
 
 const error = (status, message) => HttpResponse.json({ message }, { status });
 
@@ -64,6 +70,32 @@ export const handlers = [
     return HttpResponse.json(listing);
   }),
 
+  http.get("/api/listings/:id/purchases", async ({ params }) => {
+    await delay();
+    const listing = listingData.find(
+      (l) => l.id === params.id && l.seller.id === currentUser.id,
+    );
+    if (!listing) return error(404, "Listing not found");
+    return HttpResponse.json(
+      purchases
+        .filter((p) => p.listingId === listing.id)
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+    );
+  }),
+
+  http.get("/api/me/listings", async ({ request }) => {
+    await delay();
+    const status = new URL(request.url).searchParams.get("status");
+    return HttpResponse.json(
+      listingData
+        .filter(
+          (l) =>
+            l.seller.id === currentUser.id && (!status || l.status === status),
+        )
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+    );
+  }),
+
   http.post("/api/purchases", async ({ request }) => {
     await delay();
     const { listingId, diningHallId, meetAt } = await request.json();
@@ -103,7 +135,6 @@ export const handlers = [
       paymentInfo: paymentInfo[listing.seller.id],
       diningHall,
       meetAt: listing.fulfillment === "in_person" ? meetAt : null,
-      orderNumber: null,
       status: "pending",
       createdAt: now.toISOString(),
     };

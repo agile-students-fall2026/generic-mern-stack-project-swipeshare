@@ -6,6 +6,14 @@ const minutesFromNow = (minutes) =>
 const halls = (...names) =>
   names.map((name) => locations.find((l) => l.name === name));
 
+export const currentUser = {
+  id: "u1",
+  firstName: "Alex",
+  lastInitial: "K",
+  rating: 4.6,
+  avatarUrl: "https://picsum.photos/seed/u1/200",
+};
+
 export const listingData = [
   {
     id: "l1",
@@ -117,15 +125,51 @@ export const listingData = [
       { start: minutesFromNow(1500), end: minutesFromNow(1620) },
     ],
   },
+  {
+    id: "m1",
+    fulfillment: "in_person",
+    seller: currentUser,
+    price: 750,
+    paymentMethods: ["venmo", "cash"],
+    status: "active",
+    createdAt: minutesFromNow(-60),
+    diningHalls: halls("Lipton"),
+    windows: [{ start: minutesFromNow(180), end: minutesFromNow(300) }],
+  },
+  {
+    id: "m2",
+    fulfillment: "in_person",
+    seller: currentUser,
+    price: 800,
+    paymentMethods: ["venmo", "zelle", "cash"],
+    status: "sold",
+    createdAt: minutesFromNow(-200),
+    diningHalls: halls("Downstein", "Upstein"),
+    windows: [{ start: minutesFromNow(30), end: minutesFromNow(90) }],
+  },
+  {
+    id: "m3",
+    fulfillment: "online",
+    seller: currentUser,
+    price: 900,
+    paymentMethods: ["venmo", "zelle"],
+    status: "active",
+    createdAt: minutesFromNow(-90),
+    windows: [{ start: minutesFromNow(-60), end: minutesFromNow(120) }],
+    quantity: 1,
+  },
+  {
+    id: "m4",
+    fulfillment: "in_person",
+    seller: currentUser,
+    price: 700,
+    paymentMethods: ["zelle"],
+    status: "expired",
+    createdAt: minutesFromNow(-3000),
+    diningHalls: halls("Palladium"),
+    windows: [{ start: minutesFromNow(-2880), end: minutesFromNow(-2760) }],
+  },
 ];
-
-export const currentUser = {
-  id: "u1",
-  firstName: "Alex",
-  lastInitial: "K",
-  rating: 4.6,
-  avatarUrl: "https://picsum.photos/seed/u1/200",
-};
 
 export const phones = {
   u1: "212-555-0100",
@@ -135,6 +179,8 @@ export const phones = {
   s4: "212-555-0104",
   s5: "212-555-0105",
   s6: "212-555-0106",
+  b1: "212-555-0201",
+  b2: "212-555-0202",
 };
 
 export const paymentInfo = {
@@ -144,4 +190,53 @@ export const paymentInfo = {
   s4: "Zelle 212-555-0104 · PayPal noa@example.com",
   s5: "Venmo @anan-n",
   s6: null,
+  u1: "Venmo @alex-k · Zelle 212-555-0100",
 };
+
+const buyers = {
+  b1: {
+    id: "b1",
+    firstName: "John",
+    lastInitial: "D",
+    rating: 4.8,
+    avatarUrl: "https://picsum.photos/seed/b1/200",
+  },
+  b2: {
+    id: "b2",
+    firstName: "Mia",
+    lastInitial: "L",
+    rating: 4.2,
+    avatarUrl: "https://picsum.photos/seed/b2/200",
+  },
+};
+
+const seedPurchase = (id, listingId, buyer, fields) => {
+  const listing = listingData.find((l) => l.id === listingId);
+  return {
+    id,
+    listingId,
+    fulfillment: listing.fulfillment,
+    seller: { ...listing.seller, phone: phones[listing.seller.id] },
+    buyer: { ...buyer, phone: phones[buyer.id] },
+    price: listing.price,
+    paymentMethods: listing.paymentMethods,
+    paymentInfo: paymentInfo[listing.seller.id],
+    diningHall: null,
+    meetAt: null,
+    status: "pending",
+    ...fields,
+  };
+};
+
+export const purchaseData = [
+  seedPurchase("p1", "m2", buyers.b1, {
+    diningHall: halls("Downstein")[0],
+    meetAt: minutesFromNow(45),
+    createdAt: minutesFromNow(-20),
+  }),
+  seedPurchase("p2", "m3", buyers.b2, {
+    status: "completed",
+    createdAt: minutesFromNow(-50),
+  }),
+  seedPurchase("p3", "m3", buyers.b1, { createdAt: minutesFromNow(-10) }),
+];

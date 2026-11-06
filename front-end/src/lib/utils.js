@@ -28,3 +28,17 @@ export const displayWindow = ({ start, end }) =>
 
 export const fromNow = (date, now) =>
   formatDistanceStrict(date, now, { addSuffix: true });
+
+export const paymentLabels = {
+  venmo: "Venmo",
+  zelle: "Zelle",
+  paypal: "PayPal",
+  cash: "Cash",
+  apple_cash: "Apple Cash",
+};
+
+// ["venmo", "zelle", "cash"] -> "Venmo, Zelle, or Cash"
+export const displayPaymentMethods = (methods) =>
+  new Intl.ListFormat("en", { type: "disjunction" }).format(
+    methods.map((m) => paymentLabels[m]),
+  );

@@ -1,4 +1,15 @@
 import { delay, http, HttpResponse } from "msw";
+import { locations } from "../../../shared/locations";
+import { currentUser, listingData, paymentInfo, phones } from "./data";
+
+const purchases = [];
+
+const error = (status, message) => HttpResponse.json({ message }, { status });
+
+const inWindow = (listing, time) =>
+  listing.windows.some(
+    (w) => new Date(w.start) <= time && time < new Date(w.end),
+  );
 
 export const handlers = [
   http.get("/api/health", async () => {
@@ -10,36 +21,135 @@ export const handlers = [
     });
   }),
 
-  http.get("/api/purchases/:id", async (req) => {
-    await delay();
-    const { id } = req.params;
-    return HttpResponse.json({
-      id,
-      seller: "First L.",
-      buyer: "Seller N.",
-      status: "pending",
-      price: 100,
-      location: "Lipton Hall",
-      scheduledDate: "2026-11-05T23:59:00Z",
-      sellerPhone: "123-456-7890",
-    });
-  }),
-
-  // submit review
   http.post("/api/review", async () => {
     await delay();
-    return HttpResponse.json({});
+    return HttpResponse.json({}, { status: 201 });
   }),
 
-  // buyer mark purchase complete
-  http.post("/api/purchase/complete", async () => {
+  http.get("/api/listings", async ({ request }) => {
     await delay();
-    return HttpResponse.json({});
+
+    const params = new URL(request.url).searchParams;
+    const fulfillment = params.get("fulfillment");
+    const diningHall = params.get("diningHall");
+    const from = new Date(params.get("from") ?? Date.now());
+    const to = params.has("to") ? new Date(params.get("to")) : null;
+
+    const overlaps = (start, end) =>
+      new Date(end) >= from && (!to || new Date(start) <= to);
+
+    let result = listingData.filter(
+      (l) =>
+        l.status === "active" &&
+        l.windows.some((w) => overlaps(w.start, w.end)),
+    );
+    if (fulfillment) {
+      result = result.filter((l) => l.fulfillment === fulfillment);
+    }
+    if (diningHall) {
+      result = result.filter(
+        (l) =>
+          l.fulfillment !== "in_person" ||
+          l.diningHalls.some((h) => h.name === diningHall),
+      );
+    }
+
+    return HttpResponse.json(result);
   }),
 
-  // buyer cancel purchase
-  http.post("/api/purchase/cancel", async () => {
+  http.get("/api/listings/:id", async ({ params }) => {
     await delay();
-    return HttpResponse.json({});
+    const listing = listingData.find((l) => l.id === params.id);
+    if (!listing) {
+      return HttpResponse.json(
+        { message: "Listing not found" },
+        { status: 404 },
+      );
+    }
+    return HttpResponse.json(listing);
+  }),
+
+  http.post("/api/purchases", async ({ request }) => {
+    await delay();
+    const { listingId, diningHallId, meetAt } = await request.json();
+    const listing = listingData.find((l) => l.id === listingId);
+    if (!listing) return error(404, "Listing not found");
+    if (listing.status !== "active") {
+      return error(409, "This swipe is no longer available");
+    }
+
+    const now = new Date();
+    let diningHall = null;
+    if (listing.fulfillment === "in_person") {
+      diningHall = listing.diningHalls.find((h) => h.id === diningHallId);
+      if (!diningHall)
+        return error(400, "Pick one of the seller's dining halls");
+      const time = new Date(meetAt);
+      if (!meetAt || time < now || !inWindow(listing, time)) {
+        return error(400, "Pick a time when the seller is available");
+      }
+      listing.status = "sold";
+    } else {
+      if (!inWindow(listing, now)) {
+        return error(409, "The seller isn't taking orders right now");
+      }
+      listing.quantity -= 1;
+      if (listing.quantity === 0) listing.status = "sold";
+    }
+
+    const purchase = {
+      id: crypto.randomUUID(),
+      listingId: listing.id,
+      fulfillment: listing.fulfillment,
+      seller: { ...listing.seller, phone: phones[listing.seller.id] },
+      buyer: { ...currentUser, phone: phones[currentUser.id] },
+      price: listing.price,
+      paymentMethods: listing.paymentMethods,
+      paymentInfo: paymentInfo[listing.seller.id],
+      diningHall,
+      meetAt: listing.fulfillment === "in_person" ? meetAt : null,
+      orderNumber: null,
+      status: "pending",
+      createdAt: now.toISOString(),
+    };
+    purchases.push(purchase);
+    return HttpResponse.json(purchase, { status: 201 });
+  }),
+
+  http.get("/api/purchases/:id", async ({ params }) => {
+    await delay();
+    const purchase = purchases.find((p) => p.id === params.id);
+    if (!purchase) return error(404, "Purchase not found");
+    return HttpResponse.json(purchase);
+  }),
+
+  http.post("/api/purchases/:id/complete", async ({ params }) => {
+    await delay();
+    const purchase = purchases.find((p) => p.id === params.id);
+    if (!purchase) return error(404, "Purchase not found");
+    if (purchase.status !== "pending") {
+      return error(409, `This purchase is already ${purchase.status}`);
+    }
+    purchase.status = "completed";
+    return HttpResponse.json(purchase);
+  }),
+
+  http.post("/api/purchases/:id/cancel", async ({ params }) => {
+    await delay();
+    const purchase = purchases.find((p) => p.id === params.id);
+    if (!purchase) return error(404, "Purchase not found");
+    if (purchase.status !== "pending") {
+      return error(409, `This purchase is already ${purchase.status}`);
+    }
+    purchase.status = "cancelled";
+    const listing = listingData.find((l) => l.id === purchase.listingId);
+    if (listing.fulfillment === "online") listing.quantity += 1;
+    listing.status = "active";
+    return HttpResponse.json(purchase);
+  }),
+
+  http.get("/api/dining-halls", async () => {
+    await delay();
+    return HttpResponse.json(locations);
   }),
 ];

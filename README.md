@@ -41,3 +41,7 @@ cd "$(git rev-parse --show-toplevel)" && npm run docs
 Add your route in `front-end/src/mocks/handlers.js`, then `fetch` from front end as usual. Set `VITE_DISABLE_MOCKS=true` to disable mocking.
 
 Please design your API according to OpenAPI standard, and write the API doc in `docs/openapi.yaml`
+
+## Resources
+
+[Dining Hall List](https://apiv4.dineoncampus.com/sites/5cab70a48e45bf099f4a9970/locations-public?for_map=true&locale=en)

@@ -1,13 +1,14 @@
 import "./RatingPage.css";
 import { Header } from "@/components/Header";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import RatingSlider from "../components/ratingSlider.jsx";
 
 function RatingPage() {
   const { id } = useParams();
   const [slot, setSlot] = useState(<span></span>);
   const [userRating, setUserRating] = useState(-1);
+  const navigate = useNavigate();
 
   function handleReviewSubmit() {
     fetch("/api/review", {
@@ -26,8 +27,7 @@ function RatingPage() {
         return;
       }
       r.json().then((response) => {
-        // TODO link back to marketplace or whatever
-        console.log("review sent");
+        navigate(`/marketplace`);
       });
     });
   }
@@ -46,7 +46,7 @@ function RatingPage() {
 
       r.json().then((purchaseDetails) => {
         console.log("returning");
-        setSlot(<p className="rate-name">{purchaseDetails.seller}</p>);
+        setSlot(<p className="rate-name">{purchaseDetails.seller.firstName} {purchaseDetails.seller.lastInitial}.</p>);
       });
     });
   }, [id]);

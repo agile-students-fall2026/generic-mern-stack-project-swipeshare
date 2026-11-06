@@ -68,6 +68,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a listing
+      description: The current user becomes the seller.
+      operationId: createListing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListingRequest"
+      responses:
+        "201":
+          description: Listing created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Listing"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /api/listings/{id}:
     get:
@@ -500,6 +523,40 @@ components:
         image:
           type: string
           format: uri
+
+    ListingRequest:
+      type: object
+      required: [fulfillment, price, paymentMethods, windows]
+      properties:
+        fulfillment:
+          $ref: "#/components/schemas/Fulfillment"
+        price:
+          description: Price in cents
+          type: integer
+          minimum: 1
+          example: 850
+        paymentMethods:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/PaymentMethod"
+        windows:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/TimeWindow"
+        diningHallIds:
+          description: In-person only. IDs from `GET /api/dining-halls`.
+          type: array
+          items:
+            type: string
+          example: [5d477f3b1ca48e0934e57624]
+        quantity:
+          description: Online only
+          type: integer
+          minimum: 1
+          example: 5
 
     PurchaseStatus:
       type: string

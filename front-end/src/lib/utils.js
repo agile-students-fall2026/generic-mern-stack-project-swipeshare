@@ -29,7 +29,7 @@ export const displayWindow = ({ start, end }) =>
 export const fromNow = (date, now) =>
   formatDistanceStrict(date, now, { addSuffix: true });
 
-const PAYMENT_LABELS = {
+export const PAYMENT_LABELS = {
   venmo: "Venmo",
   zelle: "Zelle",
   paypal: "PayPal",

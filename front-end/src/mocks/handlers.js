@@ -43,6 +43,42 @@ export const handlers = [
     return HttpResponse.json(listing);
   }),
 
+  http.post("/api/listings", async ({ request }) => {
+    await delay();
+    const body = await request.json();
+    if (
+      !(body.price > 0) ||
+      !body.paymentMethods?.length ||
+      !body.windows?.length
+    ) {
+      return error(400, "Missing price, payment methods, or time");
+    }
+    if (new Date(body.windows[0].end) <= new Date()) {
+      return error(400, "Pick a time in the future");
+    }
+    const inPerson = body.fulfillment === "in_person";
+    const listing = {
+      id: crypto.randomUUID(),
+      fulfillment: body.fulfillment,
+      seller: currentUser,
+      price: body.price,
+      paymentMethods: body.paymentMethods,
+      status: "active",
+      createdAt: new Date().toISOString(),
+      windows: body.windows,
+      ...(inPerson
+        ? {
+            diningHalls: locations.filter((l) =>
+              body.diningHallIds?.includes(l.id),
+            ),
+          }
+        : { quantity: body.quantity }),
+    };
+    // Saved so it shows up in My Listings and its detail page
+    listingData.unshift(listing);
+    return HttpResponse.json(listing, { status: 201 });
+  }),
+
   http.get("/api/listings/:id/purchases", async ({ params }) => {
     await delay();
     return HttpResponse.json(

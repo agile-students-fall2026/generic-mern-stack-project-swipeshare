@@ -1,6 +1,10 @@
 import { Header } from "@/components/Header";
 import { toast } from "@/components/ui/toast";
-import { displayPrice, fullNameInitial } from "@/lib/utils";
+import {
+  displayPaymentMethods,
+  displayPrice,
+  fullNameInitial,
+} from "@/lib/utils";
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -67,7 +71,7 @@ const SwipeDetail = () => {
           <PurchaseDrawer listing={data} />
           <div className="flex flex-col gap-1 items-center justify-center">
             <p className="text-md font-medium">Supported Payment Methods</p>
-            <p>{data.paymentMethods.join(", ")}</p>
+            <p>{displayPaymentMethods(data.paymentMethods)}</p>
           </div>
           <p className="text-md px-2 text-center text-neutral-800">
             {data.fulfillment === "in_person"

@@ -28,3 +28,14 @@ export const displayWindow = ({ start, end }) =>
 
 export const fromNow = (date, now) =>
   formatDistanceStrict(date, now, { addSuffix: true });
+
+const PAYMENT_LABELS = {
+  venmo: "Venmo",
+  zelle: "Zelle",
+  paypal: "PayPal",
+  cash: "Cash",
+  apple_cash: "Apple Cash",
+};
+
+export const displayPaymentMethods = (methods) =>
+  methods.map((m) => PAYMENT_LABELS[m]).join(", ");

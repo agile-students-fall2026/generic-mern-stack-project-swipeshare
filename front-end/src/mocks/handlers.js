@@ -1,15 +1,8 @@
 import { delay, http, HttpResponse } from "msw";
 import { locations } from "../../../shared/locations";
-import { currentUser, listingData, paymentInfo, phones } from "./data";
-
-const purchases = [];
+import { currentUser, listingData, purchaseData } from "./data";
 
 const error = (status, message) => HttpResponse.json({ message }, { status });
-
-const inWindow = (listing, time) =>
-  listing.windows.some(
-    (w) => new Date(w.start) <= time && time < new Date(w.end),
-  );
 
 export const handlers = [
   http.get("/api/health", async () => {
@@ -30,31 +23,12 @@ export const handlers = [
     await delay();
 
     const params = new URL(request.url).searchParams;
-    const fulfillment = params.get("fulfillment");
-    const diningHall = params.get("diningHall");
-    const from = new Date(params.get("from") ?? Date.now());
-    const to = params.has("to") ? new Date(params.get("to")) : null;
-
-    const overlaps = (start, end) =>
-      new Date(end) >= from && (!to || new Date(start) <= to);
-
-    let result = listingData.filter(
-      (l) =>
-        l.status === "active" &&
-        l.windows.some((w) => overlaps(w.start, w.end)),
-    );
-    if (fulfillment) {
-      result = result.filter((l) => l.fulfillment === fulfillment);
-    }
-    if (diningHall) {
-      result = result.filter(
-        (l) =>
-          l.fulfillment !== "in_person" ||
-          l.diningHalls.some((h) => h.name === diningHall),
-      );
+    if (params.size > 0) {
+      const count = Math.ceil(Math.random() * listingData.length);
+      return HttpResponse.json(listingData.slice(0, count));
     }
 
-    return HttpResponse.json(result);
+    return HttpResponse.json(listingData);
   }),
 
   http.get("/api/listings/:id", async ({ params }) => {
@@ -69,83 +43,48 @@ export const handlers = [
     return HttpResponse.json(listing);
   }),
 
-  http.post("/api/purchases", async ({ request }) => {
+  http.get("/api/listings/:id/purchases", async ({ params }) => {
     await delay();
-    const { listingId, diningHallId, meetAt } = await request.json();
-    const listing = listingData.find((l) => l.id === listingId);
-    if (!listing) return error(404, "Listing not found");
-    if (listing.status !== "active") {
-      return error(409, "This swipe is no longer available");
-    }
+    return HttpResponse.json(
+      purchaseData.filter((p) => p.listingId === params.id),
+    );
+  }),
 
-    const now = new Date();
-    let diningHall = null;
-    if (listing.fulfillment === "in_person") {
-      diningHall = listing.diningHalls.find((h) => h.id === diningHallId);
-      if (!diningHall)
-        return error(400, "Pick one of the seller's dining halls");
-      const time = new Date(meetAt);
-      if (!meetAt || time < now || !inWindow(listing, time)) {
-        return error(400, "Pick a time when the seller is available");
-      }
-      listing.status = "sold";
-    } else {
-      if (!inWindow(listing, now)) {
-        return error(409, "The seller isn't taking orders right now");
-      }
-      listing.quantity -= 1;
-      if (listing.quantity === 0) listing.status = "sold";
-    }
+  http.get("/api/me/listings", async ({ request }) => {
+    await delay();
+    const status = new URL(request.url).searchParams.get("status");
+    return HttpResponse.json(
+      listingData.filter(
+        (l) =>
+          l.seller.id === currentUser.id && (!status || l.status === status),
+      ),
+    );
+  }),
 
-    const purchase = {
-      id: crypto.randomUUID(),
-      listingId: listing.id,
-      fulfillment: listing.fulfillment,
-      seller: { ...listing.seller, phone: phones[listing.seller.id] },
-      buyer: { ...currentUser, phone: phones[currentUser.id] },
-      price: listing.price,
-      paymentMethods: listing.paymentMethods,
-      paymentInfo: paymentInfo[listing.seller.id],
-      diningHall,
-      meetAt: listing.fulfillment === "in_person" ? meetAt : null,
-      orderNumber: null,
-      status: "pending",
-      createdAt: now.toISOString(),
-    };
-    purchases.push(purchase);
-    return HttpResponse.json(purchase, { status: 201 });
+  http.post("/api/purchases", async () => {
+    await delay();
+    return HttpResponse.json(purchaseData[0], { status: 201 });
   }),
 
   http.get("/api/purchases/:id", async ({ params }) => {
     await delay();
-    const purchase = purchases.find((p) => p.id === params.id);
+    const purchase = purchaseData.find((p) => p.id === params.id);
     if (!purchase) return error(404, "Purchase not found");
     return HttpResponse.json(purchase);
   }),
 
   http.post("/api/purchases/:id/complete", async ({ params }) => {
     await delay();
-    const purchase = purchases.find((p) => p.id === params.id);
+    const purchase = purchaseData.find((p) => p.id === params.id);
     if (!purchase) return error(404, "Purchase not found");
-    if (purchase.status !== "pending") {
-      return error(409, `This purchase is already ${purchase.status}`);
-    }
-    purchase.status = "completed";
-    return HttpResponse.json(purchase);
+    return HttpResponse.json({ ...purchase, status: "completed" });
   }),
 
   http.post("/api/purchases/:id/cancel", async ({ params }) => {
     await delay();
-    const purchase = purchases.find((p) => p.id === params.id);
+    const purchase = purchaseData.find((p) => p.id === params.id);
     if (!purchase) return error(404, "Purchase not found");
-    if (purchase.status !== "pending") {
-      return error(409, `This purchase is already ${purchase.status}`);
-    }
-    purchase.status = "cancelled";
-    const listing = listingData.find((l) => l.id === purchase.listingId);
-    if (listing.fulfillment === "online") listing.quantity += 1;
-    listing.status = "active";
-    return HttpResponse.json(purchase);
+    return HttpResponse.json({ ...purchase, status: "cancelled" });
   }),
 
   http.get("/api/dining-halls", async () => {

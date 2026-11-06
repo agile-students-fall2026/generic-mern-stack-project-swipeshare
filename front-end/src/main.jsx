@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import { AppLayout } from "./components/AppLayout";
 import { Header } from "./components/Header";
 import NotFound from "./components/NotFound";
+import HowItWorksPage from "./pages/HowItWorksPage.jsx";
 import SelectUserType from "./pages/SelectUserType.jsx";
 
 async function enableMocking() {
@@ -30,10 +31,7 @@ enableMocking()
             <Route element={<AppLayout />}>
               {/* Replace with your components */}
               <Route path="/" element={<App />} />
-              <Route
-                path="/how-it-works"
-                element={<Header title="How It Works" />}
-              />
+              <Route path="/how-it-works" element={<HowItWorksPage />} />
               <Route path="/select-user-type" element={<SelectUserType />} />
               <Route
                 path="/marketplace"

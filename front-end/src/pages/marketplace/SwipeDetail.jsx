@@ -1,10 +1,10 @@
 import { Header } from "@/components/Header";
-import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { displayPrice, fullNameInitial } from "@/lib/utils";
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import PurchaseDrawer from "./PurchaseDrawer";
 import TimeSlots from "./TimeSlots";
 
 const SwipeDetail = () => {
@@ -64,7 +64,7 @@ const SwipeDetail = () => {
           )}
           <TimeSlots listing={data} />
           <h1 className="text-6xl font-medium">${displayPrice(data.price)}</h1>
-          <Button size="lg">Purchase This Swipe</Button>
+          <PurchaseDrawer listing={data} />
           <div className="flex flex-col gap-1 items-center justify-center">
             <p className="text-md font-medium">Supported Payment Methods</p>
             <p>{data.paymentMethods.join(", ")}</p>

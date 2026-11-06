@@ -33,7 +33,7 @@ paths:
           description: >
             Only return in-person listings whose `diningHalls` includes the
             dining hall with this `name`. Online listings are not filtered by
-            it, since the buyer picks the pickup location.
+            it, since the buyer texts the seller what to order and where.
           schema:
             type: string
             example: Downstein
@@ -93,6 +93,122 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /api/purchases:
+    post:
+      summary: Purchase a listing
+      operationId: createPurchase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PurchaseRequest"
+      responses:
+        "201":
+          description: Purchase created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Purchase"
+        "400":
+          description: >
+            Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Listing not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/purchases/{id}:
+    parameters:
+      - $ref: "#/components/parameters/PurchaseId"
+    get:
+      summary: Get a purchase
+      description: Only the buyer and the seller of the purchase can see it.
+      operationId: getPurchase
+      responses:
+        "200":
+          description: The purchase
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Purchase"
+        "404":
+          description: Purchase not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/purchases/{id}/complete:
+    parameters:
+      - $ref: "#/components/parameters/PurchaseId"
+    post:
+      summary: Mark a purchase as complete
+      description: >
+        Called by the buyer after getting swiped in or picking up the order.
+        The buyer then pays the seller outside SwipeShare.
+      operationId: completePurchase
+      responses:
+        "200":
+          description: The completed purchase
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Purchase"
+        "404":
+          description: Purchase not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The purchase is not pending
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/purchases/{id}/cancel:
+    parameters:
+      - $ref: "#/components/parameters/PurchaseId"
+    post:
+      summary: Cancel a purchase
+      description: >
+        Puts the swipe back on the marketplace: the in-person listing becomes
+        active again, or the online listing's `quantity` goes back up by one.
+      operationId: cancelPurchase
+      responses:
+        "200":
+          description: The cancelled purchase
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Purchase"
+        "404":
+          description: Purchase not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The purchase is not pending
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /api/dining-halls:
     get:
       summary: List dining halls
@@ -109,6 +225,14 @@ paths:
                   $ref: "#/components/schemas/DiningHall"
 
 components:
+  parameters:
+    PurchaseId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+
   schemas:
     Health:
       type: object
@@ -304,6 +428,109 @@ components:
         image:
           type: string
           format: uri
+
+    PurchaseStatus:
+      type: string
+      enum: [pending, completed, cancelled]
+
+    PurchaseRequest:
+      type: object
+      required: [listingId]
+      properties:
+        listingId:
+          type: string
+          example: <uuid>
+        diningHallId:
+          description: In-person only
+          type: string
+          example: 5d2faa744198d4072d6457a8
+        meetAt:
+          description: In-person only
+          type: string
+          format: date-time
+
+    PurchaseUser:
+      description: >
+        The buyer or seller of a purchase, with their phone number so the
+        other side can text them. Only visible to the two of them.
+      allOf:
+        - $ref: "#/components/schemas/UserSummary"
+        - type: object
+          required: [phone]
+          properties:
+            phone:
+              type: string
+              example: 212-555-0101
+
+    Purchase:
+      type: object
+      required:
+        - id
+        - listingId
+        - fulfillment
+        - seller
+        - buyer
+        - price
+        - paymentMethods
+        - paymentInfo
+        - diningHall
+        - meetAt
+        - orderNumber
+        - status
+        - createdAt
+      properties:
+        id:
+          type: string
+          example: <uuid>
+        listingId:
+          type: string
+          example: <uuid>
+        fulfillment:
+          $ref: "#/components/schemas/Fulfillment"
+        seller:
+          $ref: "#/components/schemas/PurchaseUser"
+        buyer:
+          $ref: "#/components/schemas/PurchaseUser"
+        price:
+          description: Price in cents, at the time of purchase
+          type: integer
+          minimum: 0
+          example: 850
+        paymentMethods:
+          description: The listing's payment methods, at the time of purchase
+          type: array
+          items:
+            $ref: "#/components/schemas/PaymentMethod"
+          example: [venmo, zelle, cash]
+        paymentInfo:
+          description: >
+            Free text from the seller on how to pay them, e.g. their Venmo or
+            Zelle handle. `null` if they didn't add any.
+          type: [string, "null"]
+          example: Venmo @jane-s · Zelle 212-555-0101
+        diningHall:
+          description: In-person, where the buyer and seller meet. `null` for online.
+          anyOf:
+            - $ref: "#/components/schemas/DiningHall"
+            - type: "null"
+        meetAt:
+          description: >
+            In-person: when the buyer and seller meet at `diningHall`. `null`
+            for online.
+          type: [string, "null"]
+          format: date-time
+        orderNumber:
+          description: >
+            Online: the Grubhub order number, set by the seller after placing
+            the order. The buyer gives it and the seller's name at pickup.
+            `null` until then, and always `null` for in-person.
+          type: [string, "null"]
+          example: "4821"
+        status:
+          $ref: "#/components/schemas/PurchaseStatus"
+        createdAt:
+          type: string
+          format: date-time
 
     Error:
       type: object

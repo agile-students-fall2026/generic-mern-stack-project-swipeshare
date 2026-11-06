@@ -68,7 +68,7 @@ const DiningHallFilter = ({ value, onChange }) => {
   );
 };
 
-const HallOption = ({ name, address, image, selected, onSelect }) => (
+export const HallOption = ({ name, address, image, selected, onSelect }) => (
   <button
     type="button"
     data-selected={selected || undefined}

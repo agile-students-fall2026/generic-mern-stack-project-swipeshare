@@ -118,3 +118,30 @@ export const listingData = [
     ],
   },
 ];
+
+export const currentUser = {
+  id: "u1",
+  firstName: "Alex",
+  lastInitial: "K",
+  rating: 9.1,
+  avatarUrl: "https://picsum.photos/seed/u1/200",
+};
+
+export const phones = {
+  u1: "212-555-0100",
+  s1: "212-555-0101",
+  s2: "212-555-0102",
+  s3: "212-555-0103",
+  s4: "212-555-0104",
+  s5: "212-555-0105",
+  s6: "212-555-0106",
+};
+
+export const paymentInfo = {
+  s1: "Venmo @jane-s · Zelle 212-555-0101",
+  s2: "Venmo @sherry-t",
+  s3: "Venmo @emma-s · Zelle emma@example.com · Apple Cash 212-555-0103",
+  s4: "Zelle 212-555-0104 · PayPal noa@example.com",
+  s5: "Venmo @anan-n",
+  s6: null,
+};

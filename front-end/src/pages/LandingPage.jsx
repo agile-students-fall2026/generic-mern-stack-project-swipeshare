@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import googleLogo from "../assets/google-logo.svg";
 import "./LandingPage.css";
 
 function LandingPage() {
-  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
+  // Mocked for Sprint 1: real Google sign-in comes with the backend,
+  // so for now we just go to the next screen
   function handleGoogleSignIn() {
-    setMessage("Haven't set up google sign in for now");
+    navigate("/select-user-type");
   }
 
   return (
@@ -32,8 +33,6 @@ function LandingPage() {
         <Link to="/how-it-works" className="landing-button how-button">
           See how it works
         </Link>
-
-        {message && <p className="landing-message">{message}</p>}
       </div>
     </main>
   );

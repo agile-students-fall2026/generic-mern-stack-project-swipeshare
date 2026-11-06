@@ -9,9 +9,9 @@ import { Header } from "./components/Header";
 import NotFound from "./components/NotFound";
 import BuyerConfirmationPage from "./pages/BuyerConfirmationPage";
 import HowItWorksPage from "./pages/HowItWorksPage.jsx";
-import RatingPage from "./pages/RatingPage";
 import MarketPlace from "./pages/marketplace/MarketPlace";
 import SwipeDetail from "./pages/marketplace/SwipeDetail";
+import RatingPage from "./pages/RatingPage";
 import SelectUserType from "./pages/SelectUserType.jsx";
 
 async function enableMocking() {

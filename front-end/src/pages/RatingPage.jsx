@@ -1,7 +1,7 @@
 import "./RatingPage.css";
 import { Header } from "@/components/Header";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import RatingSlider from "../components/ratingSlider.jsx";
 
 function RatingPage() {
@@ -46,7 +46,12 @@ function RatingPage() {
 
       r.json().then((purchaseDetails) => {
         console.log("returning");
-        setSlot(<p className="rate-name">{purchaseDetails.seller.firstName} {purchaseDetails.seller.lastInitial}.</p>);
+        setSlot(
+          <p className="rate-name">
+            {purchaseDetails.seller.firstName}{" "}
+            {purchaseDetails.seller.lastInitial}.
+          </p>,
+        );
       });
     });
   }, [id]);

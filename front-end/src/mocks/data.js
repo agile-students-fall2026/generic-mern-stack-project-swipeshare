@@ -123,7 +123,7 @@ export const currentUser = {
   id: "u1",
   firstName: "Alex",
   lastInitial: "K",
-  rating: 9.1,
+  rating: 4.6,
   avatarUrl: "https://picsum.photos/seed/u1/200",
 };
 

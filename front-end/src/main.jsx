@@ -13,6 +13,8 @@ import MarketPlace from "./pages/marketplace/MarketPlace";
 import SwipeDetail from "./pages/marketplace/SwipeDetail";
 import RatingPage from "./pages/RatingPage";
 import SelectUserType from "./pages/SelectUserType.jsx";
+import CreateListing from "./pages/selling/CreateListing";
+import SaleFlow from "./pages/selling/SaleFlow";
 
 async function enableMocking() {
   if (!import.meta.env.DEV || import.meta.env.VITE_DISABLE_MOCKS) {
@@ -40,19 +42,13 @@ enableMocking()
               <Route path="/how-it-works" element={<HowItWorksPage />} />
               <Route path="/select-user-type" element={<SelectUserType />} />
               <Route path="/marketplace" element={<MarketPlace />} />
-              <Route
-                path="/listings/new"
-                element={<Header title="Sell a Swipe" />}
-              />
+              <Route path="/listings/new" element={<CreateListing />} />
               <Route path="/listings/:id" element={<SwipeDetail />} />
               <Route
                 path="/my-listings"
                 element={<Header title="My Listings" />}
               />
-              <Route
-                path="/my-listings/:id"
-                element={<Header title="Listing Detail" />}
-              />
+              <Route path="/my-listings/:id" element={<SaleFlow />} />
               <Route
                 path="/purchases/:id"
                 element={<BuyerConfirmationPage />}

@@ -1,8 +1,14 @@
 import { delay, http, HttpResponse } from "msw";
 import { locations } from "../../../shared/locations";
-import { currentUser, listingData, paymentInfo, phones } from "./data";
+import {
+  currentUser,
+  listingData,
+  paymentInfo,
+  phones,
+  purchaseData,
+} from "./data";
 
-const purchases = [];
+const purchases = [...purchaseData];
 
 const error = (status, message) => HttpResponse.json({ message }, { status });
 
@@ -67,6 +73,65 @@ export const handlers = [
       );
     }
     return HttpResponse.json(listing);
+  }),
+
+  http.post("/api/listings", async ({ request }) => {
+    await delay();
+    const body = await request.json();
+    const slot = body.windows?.[0];
+
+    if (!(body.price > 0)) return error(400, "Price must be more than $0");
+    if (!body.paymentMethods?.length) {
+      return error(400, "Pick at least one payment method");
+    }
+    if (!slot || new Date(slot.end) <= new Date(slot.start)) {
+      return error(400, "The end time must be after the start time");
+    }
+    if (new Date(slot.end) <= new Date()) {
+      return error(400, "Pick a time in the future");
+    }
+
+    const listing = {
+      id: crypto.randomUUID(),
+      fulfillment: body.fulfillment,
+      seller: currentUser,
+      price: body.price,
+      paymentMethods: body.paymentMethods,
+      windows: body.windows,
+      status: "active",
+      createdAt: new Date().toISOString(),
+    };
+
+    if (body.fulfillment === "in_person") {
+      listing.diningHalls = locations.filter((l) =>
+        body.diningHallIds?.includes(l.id),
+      );
+      if (listing.diningHalls.length === 0) {
+        return error(400, "Pick at least one dining hall");
+      }
+    } else {
+      if (!(body.quantity >= 1)) return error(400, "Sell at least 1 swipe");
+      if (body.paymentMethods.includes("cash")) {
+        return error(400, "Cash isn't allowed for online orders");
+      }
+      listing.quantity = body.quantity;
+    }
+
+    listingData.push(listing);
+    return HttpResponse.json(listing, { status: 201 });
+  }),
+
+  http.get("/api/purchases", async ({ request }) => {
+    await delay();
+    const listingId = new URL(request.url).searchParams.get("listingId");
+    const listing = listingData.find((l) => l.id === listingId);
+    if (!listing) return error(404, "Listing not found");
+    if (listing.seller.id !== currentUser.id) {
+      return error(403, "Only the seller can see this listing's sales");
+    }
+    return HttpResponse.json(
+      purchases.filter((p) => p.listingId === listingId),
+    );
   }),
 
   http.post("/api/purchases", async ({ request }) => {

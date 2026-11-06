@@ -145,3 +145,36 @@ export const paymentInfo = {
   s5: "Venmo @anan-n",
   s6: null,
 };
+
+listingData.push({
+  id: "l7",
+  fulfillment: "in_person",
+  seller: currentUser,
+  price: 900,
+  paymentMethods: ["venmo", "cash"],
+  status: "sold",
+  createdAt: minutesFromNow(-120),
+  diningHalls: halls("Lipton"),
+  windows: [{ start: minutesFromNow(30), end: minutesFromNow(90) }],
+});
+
+export const purchaseData = [
+  {
+    id: "p1",
+    listingId: "l7",
+    fulfillment: "in_person",
+    seller: { ...currentUser, phone: phones.u1 },
+    buyer: {
+      ...listingData.find((l) => l.id === "l2").seller,
+      phone: phones.s2,
+    },
+    price: 900,
+    paymentMethods: ["venmo", "cash"],
+    paymentInfo: null,
+    diningHall: halls("Lipton")[0],
+    meetAt: minutesFromNow(45),
+    orderNumber: null,
+    status: "pending",
+    createdAt: minutesFromNow(-10),
+  },
+];

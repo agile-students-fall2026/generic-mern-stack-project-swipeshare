@@ -23,7 +23,7 @@ function SelectUserType() {
           <div className="select-image" aria-hidden="true">
             <Utensils size={72} />
           </div>
-          <Link to="/listings/new" className="select-button">
+          <Link to="/my-listings" className="select-button">
             Sell Swipes
           </Link>
           <Link to="/my-listings" className="select-button secondary-button">

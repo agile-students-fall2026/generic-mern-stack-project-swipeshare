@@ -13,7 +13,7 @@ export const Header = ({ title, showBack = true }) => {
             <ArrowLeft />
           </Button>
         )}
-        <h1 className="col  -start-2 text-center text-lg font-medium">
+        <h1 className="col-start-2 text-center text-lg font-medium">
           {title}
         </h1>
       </header>

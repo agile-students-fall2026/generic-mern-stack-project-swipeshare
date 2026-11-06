@@ -116,38 +116,58 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /api/purchases:
+  /api/listings/{id}/purchases:
     get:
-      summary: List the purchases of one of your listings
-      description: Only the listing's seller can call this.
-      operationId: getPurchases
+      summary: List a listing's purchases
+      description: >
+        Only the seller can see them. An in-person listing has at most one
+        purchase; an online listing has one per swipe sold. Newest first.
+      operationId: getListingPurchases
       parameters:
-        - name: listingId
-          in: query
+        - name: id
+          in: path
           required: true
           schema:
             type: string
       responses:
         "200":
-          description: Purchases of the listing
+          description: The listing's purchases
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/Purchase"
-        "403":
-          description: Not the seller of this listing
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         "404":
-          description: Listing not found
+          description: Listing not found, or the current user isn't its seller
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
+  /api/me/listings:
+    get:
+      summary: List my listings
+      description: The current user's listings in every status, newest first.
+      operationId: getMyListings
+      parameters:
+        - name: status
+          in: query
+          required: false
+          description: Only return listings with this status. Default to return all.
+          schema:
+            $ref: "#/components/schemas/ListingStatus"
+      responses:
+        "200":
+          description: My listings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Listing"
+
+  /api/purchases:
     post:
       summary: Purchase a listing
       operationId: createPurchase
@@ -211,8 +231,9 @@ paths:
     post:
       summary: Mark a purchase as complete
       description: >
-        Called by the buyer after getting swiped in or picking up the order.
-        The buyer then pays the seller outside SwipeShare.
+        Called by the buyer or the seller once the buyer got swiped in or
+        picked up the order. The buyer then pays the seller outside
+        SwipeShare.
       operationId: completePurchase
       responses:
         "200":
@@ -583,7 +604,6 @@ components:
         - paymentInfo
         - diningHall
         - meetAt
-        - orderNumber
         - status
         - createdAt
       properties:
@@ -627,13 +647,6 @@ components:
             for online.
           type: [string, "null"]
           format: date-time
-        orderNumber:
-          description: >
-            Online: the Grubhub order number, set by the seller after placing
-            the order. The buyer gives it and the seller's name at pickup.
-            `null` until then, and always `null` for in-person.
-          type: [string, "null"]
-          example: "4821"
         status:
           $ref: "#/components/schemas/PurchaseStatus"
         createdAt:

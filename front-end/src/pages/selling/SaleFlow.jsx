@@ -23,7 +23,7 @@ const SaleFlow = () => {
       try {
         const listingRes = await fetch(`/api/listings/${id}`);
         if (!listingRes.ok) throw new Error((await listingRes.json())?.message);
-        const purchasesRes = await fetch(`/api/purchases?listingId=${id}`);
+        const purchasesRes = await fetch(`/api/listings/${id}/purchases`);
         if (!purchasesRes.ok)
           throw new Error((await purchasesRes.json())?.message);
         setListing(await listingRes.json());

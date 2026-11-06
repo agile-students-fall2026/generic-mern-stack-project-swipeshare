@@ -9,7 +9,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { toast } from "@/components/ui/toast";
-import { displayTime, paymentLabels } from "@/lib/utils";
+import { displayTime, PAYMENT_LABELS } from "@/lib/utils";
 import { addMinutes, format, roundToNearestMinutes } from "date-fns";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -65,7 +65,7 @@ const CreateListing = () => {
   }, []);
 
   const inPerson = fulfillment === "in_person";
-  const methods = Object.keys(paymentLabels).filter(
+  const methods = Object.keys(PAYMENT_LABELS).filter(
     (m) => inPerson || m !== "cash",
   );
   const selectedHalls = halls.filter((h) => hallIds.includes(h.id));
@@ -285,7 +285,7 @@ const CreateListing = () => {
                 }
                 className="h-10 rounded-lg px-2 text-sm ring-1 ring-foreground/10 transition-colors active:bg-muted data-selected:bg-primary data-selected:text-primary-foreground data-selected:ring-primary"
               >
-                {paymentLabels[method]}
+                {PAYMENT_LABELS[method]}
               </button>
             ))}
           </div>

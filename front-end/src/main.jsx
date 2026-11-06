@@ -5,12 +5,12 @@ import "./App.css";
 import { Toaster } from "@/components/ui/toast";
 import App from "./App.jsx";
 import { AppLayout } from "./components/AppLayout";
-import { Header } from "./components/Header";
 import NotFound from "./components/NotFound";
 import BuyerConfirmationPage from "./pages/BuyerConfirmationPage";
 import HowItWorksPage from "./pages/HowItWorksPage.jsx";
 import MarketPlace from "./pages/marketplace/MarketPlace";
 import SwipeDetail from "./pages/marketplace/SwipeDetail";
+import MyListings from "./pages/MyListings.jsx";
 import RatingPage from "./pages/RatingPage";
 import SelectUserType from "./pages/SelectUserType.jsx";
 import CreateListing from "./pages/selling/CreateListing";
@@ -44,10 +44,7 @@ enableMocking()
               <Route path="/marketplace" element={<MarketPlace />} />
               <Route path="/listings/new" element={<CreateListing />} />
               <Route path="/listings/:id" element={<SwipeDetail />} />
-              <Route
-                path="/my-listings"
-                element={<Header title="My Listings" />}
-              />
+              <Route path="/my-listings" element={<MyListings />} />
               <Route path="/my-listings/:id" element={<SaleFlow />} />
               <Route
                 path="/purchases/:id"

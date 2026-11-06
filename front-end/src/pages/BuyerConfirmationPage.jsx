@@ -4,6 +4,9 @@ import { Header } from '@/components/Header';
 import { useParams } from "react-router";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { format } from 'date-fns';
+import { useNavigate } from "react-router";
+
 
 function BuyerConfirmationPage() {
     const { id } = useParams();
@@ -13,6 +16,7 @@ function BuyerConfirmationPage() {
         meetupTimeString: ' ',
         sellerPhone: ' '
     });
+    const navigate = useNavigate();
 
     function stringifyDate(dateObj) {
         let nowTime = new Date();
@@ -23,14 +27,14 @@ function BuyerConfirmationPage() {
         let toReturn = ''
 
         if (nowTime.toDateString() === scheduledDate.toDateString()) {
-            toReturn = `Today at ${scheduledDate.getHours() % 12}:${scheduledDate.getMinutes()} ${scheduledDate.getHours() >= 12 ? 'PM' : 'AM'}`;
+            toReturn = `Today at ${format(scheduledDate, 'h:mm a')}`;
             if (hoursDistance === 0) {
                 toReturn += `, in ${minutesDistance}m`;
             } else if (hoursDistance > 0) {
                 toReturn += `, in ${hoursDistance}h ${minutesDistance}m`;
             }
         } else {
-            toReturn = `${scheduledDate.toDateString()} at ${scheduledDate.getHours() % 12}:${scheduledDate.getMinutes()} ${scheduledDate.getHours() >= 12 ? 'PM' : 'AM'}`;
+            toReturn = `${scheduledDate.toDateString()} at ${format(scheduledDate, 'h:mm a')}`;
         }
         return toReturn;
     }
@@ -50,7 +54,7 @@ function BuyerConfirmationPage() {
                 return;
             }
             r.json().then(() => {
-                window.location.href = `/purchases/${id}/rate`;
+                navigate(`/purchases/${id}/rate`);
             });
         });
     }
@@ -70,7 +74,7 @@ function BuyerConfirmationPage() {
                 return;
             }
             r.json().then(() => {
-                window.location.href = `/marketplace`;
+                navigate(`/marketplace`);
             });
         });
     }

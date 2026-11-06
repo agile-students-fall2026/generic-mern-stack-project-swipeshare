@@ -224,6 +224,26 @@ paths:
                 items:
                   $ref: "#/components/schemas/DiningHall"
 
+  /api/review:
+    post:
+      summary: Leave a review
+      operationId: createReview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewRequest"
+      responses:
+        "201":
+          description: Review created
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   parameters:
     PurchaseId:
@@ -531,6 +551,23 @@ components:
         createdAt:
           type: string
           format: date-time
+
+    ReviewRequest:
+      type: object
+      required: [purchaseId, rating]
+      properties:
+        purchaseId:
+          type: string
+          example: <uuid>
+        rating:
+          description: -1 for no star rating, 0-10 for 0-5 stars in half-star increments
+          type: integer
+          minimum: -1
+          maximum: 10
+          example: 9
+        comment:
+          description: Optional comment
+          type: string
 
     Error:
       type: object

@@ -7,9 +7,11 @@ import App from "./App.jsx";
 import { AppLayout } from "./components/AppLayout";
 import { Header } from "./components/Header";
 import NotFound from "./components/NotFound";
+import BuyerConfirmationPage from "./pages/BuyerConfirmationPage";
 import HowItWorksPage from "./pages/HowItWorksPage.jsx";
 import MarketPlace from "./pages/marketplace/MarketPlace";
 import SwipeDetail from "./pages/marketplace/SwipeDetail";
+import RatingPage from "./pages/RatingPage";
 import SelectUserType from "./pages/SelectUserType.jsx";
 
 async function enableMocking() {
@@ -53,12 +55,9 @@ enableMocking()
               />
               <Route
                 path="/purchases/:id"
-                element={<Header title="Confirmation" showBack={false} />}
+                element={<BuyerConfirmationPage />}
               />
-              <Route
-                path="/purchases/:id/rate"
-                element={<Header title="Rating" />}
-              />
+              <Route path="/purchases/:id/rate" element={<RatingPage />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

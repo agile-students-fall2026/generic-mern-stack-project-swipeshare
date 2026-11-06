@@ -1,9 +1,9 @@
 import { Header } from "@/components/Header";
+import MarketList from "@/components/MarketList";
 import { toast } from "@/components/ui/toast";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import ListFilters from "./ListFilters";
-import MarketList from "./MarketList";
 
 const MarketPlace = () => {
   const [data, setData] = useState(null);

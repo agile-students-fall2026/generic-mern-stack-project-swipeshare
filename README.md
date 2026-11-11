@@ -38,7 +38,7 @@ cd "$(git rev-parse --show-toplevel)" && npm run docs
 
 ## Mock Backend
 
-Add your route in `front-end/src/mocks/handlers.js`, then `fetch` from front end as usual. Set `VITE_DISABLE_MOCKS=true` to disable mocking.
+Add your route in `front-end/src/mocks/handlers.js`, then `fetch` from front end as usual. Mocking is off by default; set `VITE_ENABLE_MOCKS=true` in `front-end/.env` to enable it.
 
 Please design your API according to OpenAPI standard, and write the API doc in `docs/openapi.yaml`
 

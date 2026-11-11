@@ -1,6 +1,5 @@
 import express from "express";
 import { purchaseData } from "../data.js";
-import { app } from "../index.js";
 
 const router = express.Router();
 

@@ -3,9 +3,9 @@ import express from "express";
 import { locations } from "../shared/locations.js";
 import { currentUser, listingData, purchaseData } from "./data.js";
 import listingsRouter from "./routes/listings.js";
+import miscRouter from "./routes/misc.js";
 import purchasesRouter from "./routes/purchases.js";
 import reviewsRouter from "./routes/reviews.js";
-import miscRouter from "./routes/misc.js";
 
 dotenv.config();
 

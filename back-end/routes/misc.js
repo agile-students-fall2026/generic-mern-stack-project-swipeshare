@@ -1,7 +1,8 @@
-import { app } from "../index.js";
+import express from "express";
 import { locations } from "../../shared/locations.js";
-import express from 'express'
-const router = express.Router()
+import { app } from "../index.js";
+
+const router = express.Router();
 
 router.get("/api/health", (req, res) => {
   res.json({
@@ -15,4 +16,4 @@ router.get("/api/dining-halls", (req, res) => {
   return res.json(locations);
 });
 
-export default router
+export default router;

@@ -1,7 +1,8 @@
-import { app } from "../index.js";
+import express from "express";
 import { purchaseData } from "../data.js";
-import express from 'express'
-const router = express.Router()
+import { app } from "../index.js";
+
+const router = express.Router();
 
 router.post("/api/purchases", (req, res) => {
   return res.status(201).json(purchaseData[0]);
@@ -25,4 +26,4 @@ router.post("/api/purchases/:id/cancel", (req, res) => {
   return res.json({ ...purchase, status: "cancelled" });
 });
 
-export default router
+export default router;

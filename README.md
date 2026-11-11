@@ -7,11 +7,11 @@ npm install
 ```
 
 ```bash
-cd front-end && npm install
+cp front-end/.env.example front-end/.env
 ```
 
 ```bash
-cp .env.example .env
+cp back-end/.env.example back-end/.env
 ```
 
 ```bash
@@ -27,13 +27,13 @@ npm run lint
 To run formatter:
 
 ```bash
-cd "$(git rev-parse --show-toplevel)" && npm run format
+npm run format
 ```
 
 To view API documentation:
 
 ```bash
-cd "$(git rev-parse --show-toplevel)" && npm run docs
+npm run docs
 ```
 
 ## Mock Backend

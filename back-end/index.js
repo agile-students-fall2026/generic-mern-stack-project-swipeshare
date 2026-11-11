@@ -5,7 +5,8 @@ import { currentUser, listingData, purchaseData } from "./data.js";
 
 dotenv.config();
 
-const app = express();
+export const app = express();
+app.use(express.json());
 
 app.get("/api/health", (req, res) => {
   res.json({
@@ -36,6 +37,10 @@ app.get("/api/listings/:id", (req, res) => {
   }
   return res.json(listing);
 });
+
+app.post("/api/listings/:id/purchases", (req, res) => {
+    res.status(201).json(purchaseData.filter((p) => p.listingId === req.params.id));
+  }),
 
 app.post("/api/listings", (req, res) => {
   const body = req.body;

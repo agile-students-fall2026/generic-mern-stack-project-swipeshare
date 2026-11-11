@@ -35,8 +35,11 @@ jobs:
         with:
           node-version: lts/*
           cache: npm
-          cache-dependency-path: front-end/package.json
+          cache-dependency-path: |
+            front-end/package.json
+            back-end/package.json
       - run: npm install --prefix front-end
+      - run: npm install --prefix back-end
       - run: npm run lint
 
   docs:

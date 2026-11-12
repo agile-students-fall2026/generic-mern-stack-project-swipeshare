@@ -1,6 +1,5 @@
 import express from "express";
 import { locations } from "../../shared/locations.js";
-import { app } from "../index.js";
 
 const router = express.Router();
 

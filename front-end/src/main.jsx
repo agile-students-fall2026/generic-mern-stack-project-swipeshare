@@ -17,7 +17,7 @@ import CreateListing from "./pages/selling/CreateListing";
 import SaleFlow from "./pages/selling/SaleFlow";
 
 async function enableMocking() {
-  if (!import.meta.env.DEV || import.meta.env.VITE_DISABLE_MOCKS) {
+  if (!import.meta.env.DEV || !import.meta.env.VITE_ENABLE_MOCKS) {
     return;
   }
 

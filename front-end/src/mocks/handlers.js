@@ -14,8 +14,10 @@ export const handlers = [
     });
   }),
 
-  http.post("/api/review", async () => {
+  http.post("/api/review", async ({ request }) => {
     await delay();
+    let body = await request.json();
+    console.log("Received review:", body.purchaseId, body.rating, body.comment);
     return HttpResponse.json({}, { status: 201 });
   }),
 

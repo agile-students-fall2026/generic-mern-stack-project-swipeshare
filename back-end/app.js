@@ -1,4 +1,5 @@
 import express from "express";
+import authRouter from "./routes/auth.js";
 import listingsRouter from "./routes/listings.js";
 import miscRouter from "./routes/misc.js";
 import purchasesRouter from "./routes/purchases.js";
@@ -7,6 +8,7 @@ import reviewsRouter from "./routes/reviews.js";
 export const app = express();
 app.use(express.json());
 
+app.use(authRouter);
 app.use(listingsRouter);
 app.use(purchasesRouter);
 app.use(reviewsRouter);

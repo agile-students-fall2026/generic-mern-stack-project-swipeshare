@@ -1,3 +1,4 @@
+import { toast } from "@/components/ui/toast";
 import { Link, useNavigate } from "react-router";
 import googleLogo from "../assets/google-logo.svg";
 import "./LandingPage.css";
@@ -5,10 +6,24 @@ import "./LandingPage.css";
 function LandingPage() {
   const navigate = useNavigate();
 
-  // Mocked for Sprint 1: real Google sign-in comes with the backend,
-  // so for now we just go to the next screen
-  function handleGoogleSignIn() {
-    navigate("/select-user-type");
+  // The backend login is mocked for now (no real Google sign-in yet),
+  // it just sends back a fake token and the mock user
+  async function handleGoogleSignIn() {
+    try {
+      const res = await fetch("/api/auth/login", { method: "POST" });
+      if (!res.ok) {
+        toast.add({ type: "error", description: "Sign in failed" });
+        return;
+      }
+
+      const data = await res.json();
+      // Save the token so later requests can use it once real login exists
+      localStorage.setItem("token", data.token);
+      navigate("/select-user-type");
+    } catch (e) {
+      console.error(e);
+      toast.add({ type: "error", description: "Sign in failed" });
+    }
   }
 
   return (

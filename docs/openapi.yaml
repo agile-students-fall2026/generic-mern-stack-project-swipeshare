@@ -15,6 +15,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Health"
 
+  /api/auth/login:
+    post:
+      summary: Sign in
+      description: Mocked for now. Always signs in as the same mock user and returns a fake token.
+      operationId: login
+      responses:
+        "200":
+          description: Signed in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+
   /api/listings:
     get:
       summary: List marketplace listings
@@ -336,6 +349,16 @@ components:
         status: { type: string, enum: [ok] }
         environment: { type: string, example: development }
         timestamp: { type: string, format: date-time }
+
+    LoginResponse:
+      type: object
+      required: [token, user]
+      properties:
+        token:
+          type: string
+          example: mock-token
+        user:
+          $ref: "#/components/schemas/UserSummary"
 
     UserSummary:
       description: Public info about a user

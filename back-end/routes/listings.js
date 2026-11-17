@@ -1,5 +1,6 @@
 import express from "express";
 import { locations } from "../../shared/locations.js";
+import { createListingSchema, errorMessage } from "../../shared/schemas.js";
 import { currentUser, listingData, purchaseData } from "../data.js";
 
 const router = express.Router();
@@ -28,19 +29,11 @@ router.get("/api/listings/:id/purchases", (req, res) => {
 });
 
 router.post("/api/listings", (req, res) => {
-  const body = req.body;
-  if (
-    !(body.price > 0) ||
-    !body.paymentMethods?.length ||
-    !body.windows?.length
-  ) {
-    return res
-      .status(400)
-      .json({ message: "Missing price, payment methods, or time" });
+  const result = createListingSchema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({ message: errorMessage(result.error) });
   }
-  if (new Date(body.windows[0].end) <= new Date()) {
-    return res.status(400).json({ message: "Pick a time in the future" });
-  }
+  const body = result.data;
   const inPerson = body.fulfillment === "in_person";
   const listing = {
     id: crypto.randomUUID(),
@@ -54,12 +47,11 @@ router.post("/api/listings", (req, res) => {
     ...(inPerson
       ? {
           diningHalls: locations.filter((l) =>
-            body.diningHallIds?.includes(l.id),
+            body.diningHallIds.includes(l.id),
           ),
         }
       : { quantity: body.quantity }),
   };
-  // Saved so it shows up in My Listings and its detail page
   listingData.unshift(listing);
   return res.status(201).json(listing);
 });

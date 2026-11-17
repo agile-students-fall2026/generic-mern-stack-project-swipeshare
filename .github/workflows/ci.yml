@@ -64,6 +64,8 @@ jobs:
         with:
           node-version: lts/*
           cache: npm
-          cache-dependency-path: back-end/package.json
-      - run: npm install --prefix back-end
+          cache-dependency-path: |
+            package.json
+            back-end/package.json
+      - run: npm install
       - run: npm test --prefix back-end

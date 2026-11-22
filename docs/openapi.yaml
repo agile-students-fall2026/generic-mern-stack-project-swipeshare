@@ -28,6 +28,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/LoginResponse"
 
+  /api/me:
+    get:
+      summary: Get the signed-in user
+      description: Mocked for now. Always returns the same mock user.
+      operationId: getMe
+      responses:
+        "200":
+          description: The signed in user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSummary"
+
   /api/listings:
     get:
       summary: List marketplace listings

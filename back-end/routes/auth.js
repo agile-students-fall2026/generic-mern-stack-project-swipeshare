@@ -10,4 +10,10 @@ router.post("/api/auth/login", (req, res) => {
   res.json({ token: "mock-token", user: currentUser });
 });
 
+// Also mocked: always the same user. Once we have real JWTs this will
+// read the token from the request to figure out who is signed in.
+router.get("/api/me", (req, res) => {
+  res.json(currentUser);
+});
+
 export default router;

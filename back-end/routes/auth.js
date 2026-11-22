@@ -37,9 +37,7 @@ router.post("/api/auth/login", async (req, res) => {
   }
 
   if (!profile.email_verified || !isNyuEmail(profile.email)) {
-    return res
-      .status(403)
-      .json({ message: "Please sign in with a NYU email" });
+    return res.status(403).json({ message: "Please sign in with a NYU email" });
   }
 
   const user = {

@@ -17,9 +17,15 @@ paths:
 
   /api/auth/login:
     post:
-      summary: Sign in
-      description: Mocked for now. Always signs in as the same mock user and returns a fake token.
+      summary: Sign in with Google
+      description: Checks the Google ID token, only allows `@nyu.edu` emails, and returns a JWT. Users are not saved yet because no database yet.
       operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
       responses:
         "200":
           description: Signed in
@@ -27,6 +33,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: Missing Google credential
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Google token is invalid or expired
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Not an NYU email
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /api/me:
     get:
@@ -363,15 +387,30 @@ components:
         environment: { type: string, example: development }
         timestamp: { type: string, format: date-time }
 
+    LoginRequest:
+      type: object
+      required: [credential]
+      properties:
+        credential:
+          description: The ID token from Google's sign in button
+          type: string
+
     LoginResponse:
       type: object
       required: [token, user]
       properties:
         token:
+          description: "JWT to send as `Authorization: Bearer <token>`"
           type: string
-          example: mock-token
         user:
-          $ref: "#/components/schemas/UserSummary"
+          allOf:
+            - $ref: "#/components/schemas/UserSummary"
+            - type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: abc123@nyu.edu
 
     UserSummary:
       description: Public info about a user

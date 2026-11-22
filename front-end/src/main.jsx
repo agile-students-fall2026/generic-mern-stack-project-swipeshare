@@ -1,3 +1,4 @@
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
@@ -34,27 +35,29 @@ enableMocking()
     createRoot(document.getElementById("root")).render(
       <StrictMode>
         <Toaster />
-        <BrowserRouter>
-          <Routes>
-            <Route element={<AppLayout />}>
-              {/* Replace with your components */}
-              <Route path="/" element={<App />} />
-              <Route path="/how-it-works" element={<HowItWorksPage />} />
-              <Route path="/select-user-type" element={<SelectUserType />} />
-              <Route path="/marketplace" element={<MarketPlace />} />
-              <Route path="/listings/new" element={<CreateListing />} />
-              <Route path="/listings/:id" element={<SwipeDetail />} />
-              <Route path="/my-listings" element={<MyListings />} />
-              <Route path="/my-listings/:id" element={<SaleFlow />} />
-              <Route
-                path="/purchases/:id"
-                element={<BuyerConfirmationPage />}
-              />
-              <Route path="/purchases/:id/rate" element={<RatingPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<AppLayout />}>
+                {/* Replace with your components */}
+                <Route path="/" element={<App />} />
+                <Route path="/how-it-works" element={<HowItWorksPage />} />
+                <Route path="/select-user-type" element={<SelectUserType />} />
+                <Route path="/marketplace" element={<MarketPlace />} />
+                <Route path="/listings/new" element={<CreateListing />} />
+                <Route path="/listings/:id" element={<SwipeDetail />} />
+                <Route path="/my-listings" element={<MyListings />} />
+                <Route path="/my-listings/:id" element={<SaleFlow />} />
+                <Route
+                  path="/purchases/:id"
+                  element={<BuyerConfirmationPage />}
+                />
+                <Route path="/purchases/:id/rate" element={<RatingPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </GoogleOAuthProvider>
       </StrictMode>,
     );
   });

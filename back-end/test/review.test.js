@@ -17,13 +17,11 @@ describe("POST /api/review", () => {
   });
 
   it("201 on valid review", async () => {
-    const res = await request(app)
-      .post("/api/review")
-      .send({
-        purchaseId: "purchase1",
-        rating: 5,
-        comment: "Great product!",
-      });
+    const res = await request(app).post("/api/review").send({
+      purchaseId: "purchase1",
+      rating: 5,
+      comment: "Great product!",
+    });
     expect(res.status).to.equal(201);
     expect(res.body).to.be.an("object");
   });

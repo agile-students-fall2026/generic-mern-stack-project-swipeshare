@@ -12,14 +12,22 @@ describe("POST /api/purchases/:id/complete", () => {
   });
 
   it("only accepts POST", async () => {
-    const purchaseId = await request(app).post("/api/purchases").send({}).then(res => res.body.id);
+    const purchaseId = await request(app)
+      .post("/api/purchases")
+      .send({})
+      .then((res) => res.body.id);
     const res = await request(app).get(`/api/purchases/${purchaseId}/complete`);
     expect(res.status).to.equal(404);
   });
 
   it("200 OK on valid ID", async () => {
-    const purchaseId = await request(app).post("/api/purchases").send({}).then(res => res.body.id);
-    const res = await request(app).post(`/api/purchases/${purchaseId}/complete`);
+    const purchaseId = await request(app)
+      .post("/api/purchases")
+      .send({})
+      .then((res) => res.body.id);
+    const res = await request(app).post(
+      `/api/purchases/${purchaseId}/complete`,
+    );
     expect(res.status).to.equal(200);
     expect(res.body.status).to.equal("completed");
   });
@@ -34,13 +42,19 @@ describe("POST /api/purchases/:id/cancel", () => {
   });
 
   it("only accepts POST", async () => {
-    const purchaseId = await request(app).post("/api/purchases").send({}).then(res => res.body.id);
+    const purchaseId = await request(app)
+      .post("/api/purchases")
+      .send({})
+      .then((res) => res.body.id);
     const res = await request(app).get("/api/purchases/${purchaseId}/cancel");
     expect(res.status).to.equal(404);
   });
 
   it("200 OK on valid ID", async () => {
-    const purchaseId = await request(app).post("/api/purchases").send({}).then(res => res.body.id);
+    const purchaseId = await request(app)
+      .post("/api/purchases")
+      .send({})
+      .then((res) => res.body.id);
     const res = await request(app).post(`/api/purchases/${purchaseId}/cancel`);
     expect(res.status).to.equal(200);
     expect(res.body.status).to.equal("cancelled");

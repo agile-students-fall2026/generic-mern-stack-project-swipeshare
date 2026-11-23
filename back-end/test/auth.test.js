@@ -2,30 +2,6 @@ import { expect } from "chai";
 import request from "supertest";
 import { app } from "../app.js";
 import { currentUser } from "../data.js";
-import { isNyuEmail } from "../routes/auth.js";
-
-describe("isNyuEmail", () => {
-  it("accepts NYU emails", () => {
-    expect(isNyuEmail("alex@nyu.edu")).to.equal(true);
-  });
-
-  it("ignores capital letters", () => {
-    expect(isNyuEmail("Alex@NYU.EDU")).to.equal(true);
-  });
-
-  it("rejects other emails", () => {
-    expect(isNyuEmail("alex@gmail.com")).to.equal(false);
-  });
-
-  it("rejects look-alike domains", () => {
-    expect(isNyuEmail("alex@notnyu.edu")).to.equal(false);
-    expect(isNyuEmail("alex@nyu.edu.fake.com")).to.equal(false);
-  });
-
-  it("rejects missing emails", () => {
-    expect(isNyuEmail(undefined)).to.equal(false);
-  });
-});
 
 // We can't sign in with a real Google account in tests,
 // so these check that bad requests get turned away.

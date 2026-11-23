@@ -6,18 +6,11 @@ import { currentUser } from "../data.js";
 const router = express.Router();
 const googleClient = new OAuth2Client();
 
-// Only NYU students can use SwipeShare. We check the end of the email
-// (with the @) so things like "someone@notnyu.edu" don't get through.
-export function isNyuEmail(email) {
-  if (typeof email !== "string") {
-    return false;
-  }
-  return email.toLowerCase().endsWith("@nyu.edu");
-}
-
 // The frontend sends us the token it got from Google's sign in button.
-// We check it with Google, make sure it's an NYU email, then send back
-// our own JWT. Users aren't saved yet since we don't have a database.
+// We check it with Google, then send back our own JWT. We don't check for
+// NYU emails here because our Google project is "Internal" to nyu.edu,
+// so Google already blocks everyone else. Users aren't saved yet since we
+// don't have a database.
 router.post("/api/auth/login", async (req, res) => {
   const credential = req.body?.credential;
   if (!credential) {
@@ -34,10 +27,6 @@ router.post("/api/auth/login", async (req, res) => {
   } catch (e) {
     console.error(e);
     return res.status(401).json({ message: "Google sign in failed" });
-  }
-
-  if (!profile.email_verified || !isNyuEmail(profile.email)) {
-    return res.status(403).json({ message: "Please sign in with a NYU email" });
   }
 
   const user = {

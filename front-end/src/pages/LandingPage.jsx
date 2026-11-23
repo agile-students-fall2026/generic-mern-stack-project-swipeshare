@@ -7,8 +7,8 @@ function LandingPage() {
   const navigate = useNavigate();
 
   // Google gives us a token after the user picks their account.
-  // We send it to our backend, which checks it and makes sure it's an
-  // NYU email, then sends back our own token (a JWT).
+  // We send it to our backend, which checks it with Google and sends
+  // back our own token (a JWT).
   async function handleGoogleSuccess(credentialResponse) {
     try {
       const res = await fetch("/api/auth/login", {
@@ -17,7 +17,7 @@ function LandingPage() {
         body: JSON.stringify({ credential: credentialResponse.credential }),
       });
       if (!res.ok) {
-        // e.g. "Please sign in with your NYU email"
+        // Show the backend's message, e.g. "Google sign in failed"
         const error = await res.json();
         toast.add({
           type: "error",
@@ -51,8 +51,8 @@ function LandingPage() {
 
       <div className="landing-buttons">
         {/* Google draws this button itself, so our CSS can't restyle it.
-            hosted_domain just tells Google to suggest NYU accounts,
-            the real NYU check happens on the backend. */}
+            hosted_domain makes Google suggest NYU accounts first. Google
+            already blocks non-NYU accounts since our project is Internal. */}
         <div className="google-login">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}

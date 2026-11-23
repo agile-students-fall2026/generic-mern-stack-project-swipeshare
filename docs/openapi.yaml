@@ -18,7 +18,7 @@ paths:
   /api/auth/login:
     post:
       summary: Sign in with Google
-      description: Checks the Google ID token, only allows `@nyu.edu` emails, and returns a JWT. Users are not saved yet because no database yet.
+      description: Checks the Google ID token and returns a JWT. Only `@nyu.edu` accounts can sign in, since the Google project is Internal to NYU. Users are not saved yet because no database yet.
       operationId: login
       requestBody:
         required: true
@@ -41,12 +41,6 @@ paths:
                 $ref: "#/components/schemas/Error"
         "401":
           description: Google token is invalid or expired
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "403":
-          description: Not an NYU email
           content:
             application/json:
               schema:

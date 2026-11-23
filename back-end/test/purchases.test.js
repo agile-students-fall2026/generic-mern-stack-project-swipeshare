@@ -46,7 +46,7 @@ describe("POST /api/purchases/:id/cancel", () => {
       .post("/api/purchases")
       .send({})
       .then((res) => res.body.id);
-    const res = await request(app).get("/api/purchases/${purchaseId}/cancel");
+    const res = await request(app).get(`/api/purchases/${purchaseId}/cancel`);
     expect(res.status).to.equal(404);
   });
 

@@ -1,10 +1,12 @@
 import express from "express";
+import { createReviewSchema, errorMessage } from "../../shared/schemas.js";
 
 const router = express.Router();
 
 router.post("/api/review", (req, res) => {
-  if (!req.body || !req.body.purchaseId || req.body.rating === undefined) {
-    return res.status(400).send("Missing review data");
+  const result = createReviewSchema.safeParse(req.body ?? {});
+  if (!result.success) {
+    return res.status(400).json({ message: errorMessage(result.error) });
   }
   res.status(201).json({});
 });

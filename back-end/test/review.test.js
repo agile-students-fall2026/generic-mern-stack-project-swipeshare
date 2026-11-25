@@ -1,7 +1,6 @@
 import { expect } from "chai";
 import request from "supertest";
 import { app } from "../app.js";
-import { currentUser } from "../data.js";
 
 describe("POST /api/review", () => {
   it("400 on Empty", async () => {

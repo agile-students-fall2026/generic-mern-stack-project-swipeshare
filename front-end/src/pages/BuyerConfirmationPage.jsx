@@ -1,5 +1,4 @@
 import "./BuyerConfirmationPage.css";
-import { Header } from "@/components/Header";
 import { useGoBack } from "@/lib/navigations";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

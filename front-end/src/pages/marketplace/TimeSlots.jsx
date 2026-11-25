@@ -1,7 +1,8 @@
 import { displayWindow, fromNow } from "@/lib/utils";
+import { useState } from "react";
 
 const TimeSlots = ({ listing }) => {
-  const now = new Date();
+  const [now] = useState(() => new Date());
 
   const windows = listing.windows
     .map((w) => ({ start: new Date(w.start), end: new Date(w.end) }))

@@ -1,7 +1,7 @@
 import "./RatingPage.css";
 import { Header } from "@/components/Header";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import RatingSlider from "../components/ratingSlider.jsx";
 
 function RatingPage() {
@@ -9,6 +9,7 @@ function RatingPage() {
   const [slot, setSlot] = useState(<span></span>);
   const [userRating, setUserRating] = useState(-1);
   const navigate = useNavigate();
+  const location = useLocation();
 
   function handleReviewSubmit() {
     fetch("/api/review", {
@@ -27,7 +28,11 @@ function RatingPage() {
         return;
       }
       r.json().then((response) => {
-        navigate(`/marketplace`);
+        if (location.key === "default") {
+          navigate("/select-user-type", { replace: true });
+        } else {
+          navigate(-2);
+        }
       });
     });
   }

@@ -74,7 +74,7 @@ const PurchaseDrawer = ({ listing }) => {
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.message);
-      navigate(`/purchases/${json.id}`);
+      navigate(`/purchases/${json.id}`, { replace: true });
     } catch (e) {
       toast.add({ type: "error", description: e.message });
     } finally {

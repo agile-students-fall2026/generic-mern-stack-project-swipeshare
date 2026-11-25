@@ -33,27 +33,27 @@ function RatingPage() {
   }
 
   useEffect(() => {
-    fetch(`/api/purchases/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((r) => {
-      if (!r.ok) {
+    async function fetchOtherParty() {
+      const [purchaseRes, meRes] = await Promise.all([
+        fetch(`/api/purchases/${id}`),
+        fetch("/api/me"),
+      ]);
+      if (!purchaseRes.ok || !meRes.ok) {
         console.error("Failed to fetch purchase details");
         return;
       }
-
-      r.json().then((purchaseDetails) => {
-        console.log("returning");
-        setSlot(
-          <p className="rate-name">
-            {purchaseDetails.seller.firstName}{" "}
-            {purchaseDetails.seller.lastInitial}.
-          </p>,
-        );
-      });
-    });
+      const purchase = await purchaseRes.json();
+      const me = await meRes.json();
+      // Sellers rate the buyer, buyers rate the seller.
+      const other =
+        purchase.seller.id === me.id ? purchase.buyer : purchase.seller;
+      setSlot(
+        <p className="rate-name">
+          {other.firstName} {other.lastInitial}.
+        </p>,
+      );
+    }
+    fetchOtherParty();
   }, [id]);
 
   return (

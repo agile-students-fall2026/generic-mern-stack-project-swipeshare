@@ -9,11 +9,12 @@ import {
 } from "@/lib/utils";
 import { Phone, Star } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import TimeSlots from "../marketplace/TimeSlots";
 
 const SaleFlow = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [listing, setListing] = useState(null);
   const [purchases, setPurchases] = useState([]);
   const [updating, setUpdating] = useState(false);
@@ -44,6 +45,10 @@ const SaleFlow = () => {
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.message);
+      if (action === "complete") {
+        navigate(`/purchases/${json.id}/rate`);
+        return;
+      }
       setPurchases((prev) => prev.map((p) => (p.id === json.id ? json : p)));
       if (action === "cancel") {
         const listingRes = await fetch(`/api/listings/${id}`);

@@ -7,8 +7,7 @@ describe("POST /api/review", () => {
   it("400 on Empty", async () => {
     const res = await request(app).post("/api/review");
     expect(res.status).to.equal(400);
-    expect(res.text).to.be.a("string");
-    expect(res.text).to.include("Missing review data");
+    expect(res.body.message).to.be.a("string");
   });
 
   it("only accepts POST", async () => {

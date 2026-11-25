@@ -54,7 +54,7 @@ const PurchaseDrawer = ({ listing }) => {
   const [submitting, setSubmitting] = useState(false);
 
   const inPerson = listing.fulfillment === "in_person";
-  const now = new Date();
+  const [now] = useState(() => new Date());
   const groups = inPerson ? meetTimeGroups(listing.windows, now) : [];
   const reason = unavailableReason(listing, groups, now);
   const price = `$${displayPrice(listing.price)}`;

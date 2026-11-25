@@ -13,7 +13,7 @@ describe("GET /api/listings", () => {
   it("returns a non-empty subset with filters", async () => {
     const res = await request(app).get("/api/listings?diningHall=Palladium");
     expect(res.status).to.equal(200);
-    expect(res.body).to.be.an("array").that.is.not.empty;
+    expect(res.body).to.be.an("array").with.lengthOf.above(0);
     expect(res.body.length).to.be.at.most(listingData.length);
   });
 });

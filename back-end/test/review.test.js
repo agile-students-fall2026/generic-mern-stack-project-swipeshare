@@ -25,4 +25,12 @@ describe("POST /api/review", () => {
     expect(res.status).to.equal(201);
     expect(res.body).to.be.an("object");
   });
+
+  it("201 on review without a comment", async () => {
+    const res = await request(app).post("/api/review").send({
+      purchaseId: "purchase1",
+      rating: 0,
+    });
+    expect(res.status).to.equal(201);
+  });
 });

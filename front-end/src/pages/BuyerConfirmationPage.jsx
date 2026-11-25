@@ -1,5 +1,6 @@
 import "./BuyerConfirmationPage.css";
 import { Header } from "@/components/Header";
+import { useGoBack } from "@/lib/navigations";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns";
@@ -15,6 +16,7 @@ function BuyerConfirmationPage() {
     sellerPhone: " ",
   });
   const navigate = useNavigate();
+  const goBack = useGoBack("/marketplace");
 
   function stringifyDate(dateObj) {
     let nowTime = new Date();
@@ -55,7 +57,7 @@ function BuyerConfirmationPage() {
         return;
       }
       r.json().then((data) => {
-        navigate(`/purchases/${data.id}/rate`);
+        navigate(`/purchases/${data.id}/rate`, { replace: true });
       });
     });
   }
@@ -75,7 +77,7 @@ function BuyerConfirmationPage() {
         return;
       }
       r.json().then(() => {
-        navigate(`/marketplace`);
+        goBack();
       });
     });
   }
